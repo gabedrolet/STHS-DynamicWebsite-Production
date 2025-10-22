@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once "STHSSetting.php";
 $MenuFreeAgentYear = (integer)1;
 $MenuTeamTeamID = (integer)0;
