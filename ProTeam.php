@@ -313,7 +313,9 @@ If ($TeamInfo['TeamThemeID'] > 0){
 #tablesorter_colSelect8P:checked + label {background: var(--main-button-hover);}
 #tablesorter_colSelect8P:checked ~ #tablesorter_ColumnSelector8P {display: block;z-index:10;}
 @media screen and (max-width: 1200px){
-	.STHSPHPTeam_HomeTable td:nth-child(2){display:none;}
+	.STHSPHPTeam_HomePrimaryTableTeamImag {text-align: center;}
+	.STHSPHPTeam_HomePrimaryTableTeamInfo {display: none;}
+	.STHSPHPPlayerStat_HomeLeftTD {display:none;}
 	.STHSPHPTeam_HomeTeamStatC {display: block !important; width:400px;} 
 }
 @media screen and (max-width: 992px) {
@@ -371,7 +373,7 @@ If ($TeamInfo <> Null){
 <?php 
 echo "<div class=\"tabsmain standard\"><ul class=\"tabmain-links\">";
 If ($LeagueSimulation != Null AND $TeamFarmInfo != Null){If ($LeagueSimulation['FarmEnable'] == "True"){echo "<li><a href=\"FarmTeam.php?Team=" . $Team . "\">" . $TeamFarmInfo['Name'] . "</a></li>";}}
-echo "<li";if($SubMenu ==0){echo " class=\"activemain\"";} echo "><a href=\"#tabmain0\">" . $TeamLang['Home'] . "</a></li>";
+echo "<li";if($SubMenu ==0){echo " class=\"activemain\"";} echo "><a href=\"#tabmain0\">" . $TeamLang['TeamHome'] . "</a></li>";
 echo "<li";if($SubMenu ==1){echo " class=\"activemain\"";} echo "><a href=\"#tabmain1\">" . $TeamLang['Roster']. "</a></li>";
 echo "<li";if($SubMenu ==2){echo " class=\"activemain\"";} echo "><a href=\"#tabmain2\">" . $TeamLang['Scoring']. "</a></li>";
 echo "<li";if($SubMenu ==3){echo " class=\"activemain\"";} echo "><a href=\"#tabmain3\">" . $TeamLang['PlayersInfo']. "</a></li>";
@@ -437,7 +439,6 @@ if (empty($ScheduleNextGame) == false){while ($row = $ScheduleNextGame ->fetchAr
 	echo "<table class=\"STHSPHPTeam_HomePrimaryTable\"><tr onclick=\"Game" . $LoopCount  . "()\"><td class=\"STHSPHPTeam_HomePrimaryTableTeamImag\">\n";
 	If ($row['VisitorTeamThemeID'] > 0){echo "<img src=\"" . $ImagesCDNPath . "/images/" . $row['VisitorTeamThemeID'] .".png\" alt=\"\" class=\"STHSPHPTeam_HomePrimaryTableTeamImageSpec\">\n";}
 	echo "</td><td class=\"STHSPHPTeam_HomePrimaryTableTeamInfo\" style=\"text-align:right;\"><span class=\"STHSPHPTeam_HomePrimaryTableTeamName\">" . $row['VisitorTeamName'] . "</span><br>" . ($row['VW'] + $row['VOTW'] + $row['VSOW']) . "-" .$row['VL'] . "-" . ($row['VOTL'] + $row['VSOL']). ", ".$row['VPoints']. "pts</td>";
-	
 	echo "<td class=\"STHSPHPTeam_HomePrimaryTableTeamMiddleNotPlay\"><div class=\"STHSPHPTeam_HomePrimaryTableTeamInfoBeforeTriangle\">";
 	if ($LeagueOutputOption['ScheduleUseDateInsteadofDay'] == "True"){
 		$ScheduleDate = date_create($LeagueOutputOption['ScheduleRealDate']);
