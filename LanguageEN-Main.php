@@ -146,7 +146,7 @@ $TradeLang = array(
 'ConfirmTrade'		=> 'Confirm Trades',
 'ViewConfirmTrade'		=> 'View Confirmed Trades',
 'ViewConfirmTradeNotFound'		=> 'There is no trade confirmed.',
-'PendingTrades'		=> 'Pending Trades',
+'PendingTrade'		=> 'Pending Trades',
 'ViewPendingTrade'		=> 'View Pending Trades',
 'ViewPendingTradeNotFound'		=> 'There is no pending trade.',
 'FailPlayerUpdate'			=> 'Fail Player Update in Database',
@@ -179,4 +179,5 @@ $LeagueInformationLang = array(
 );
 
 /* End Main EN Language Pack */
+
 ?>
