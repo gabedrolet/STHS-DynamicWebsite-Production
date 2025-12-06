@@ -355,6 +355,8 @@ $TopMenuLang = array(
 'PlayersInfo'		=> 'Informations joueurs',
 'Lines'		=> 'Lignes',
 'TeamStats'		=> 'Statistiques d’équipe',
+'Schedule'		=> 'Calendrier',
+'Finance'		=> 'Finance',
 'Depth'		=> 'Profondeur',
 'History'		=> 'Historique',
 'TeamTransaction'		=> 'Dernière transactions',
@@ -375,4 +377,5 @@ $TopMenuLang = array(
 );
 
 /* End Core FR Language Pack */
+
 ?>
