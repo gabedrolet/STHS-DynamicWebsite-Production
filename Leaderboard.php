@@ -69,6 +69,16 @@ STHSErrorLeaderboard:
 }}
 
 ?>
+<style>
+@media screen and (max-width: 1200px){
+	.STHSPHPTeam_HomePrimaryTableTeamImag {text-align: center;}
+	.STHSPHPTeam_HomePrimaryTableTeamInfo {display: none;}
+	.STHSPHPLeaderboard_TableTextResult {font-size: 40px;}
+}
+@media screen and (max-width: 890px) {
+	.STHSPHPLeaderboard_TableHeadshotTD {display:none;}
+}
+</style>
 </head><body>
 <?php include "Menu.php";?>
 

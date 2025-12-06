@@ -75,7 +75,7 @@ $SearchLang = array(
 'Year'		=> 'Année',
 'SeasonStat'		=> 'Statistiques de la saison',
 'Submit'		=> 'Soumettre',
-'Injury'		=> 'Blessures/Suspensions',
+'Injury'		=> 'Blessures / Suspensions',
 'ChangeSearch'		=> 'Modifier la recherche',
 'History'			=> 'Historique',
 'ThisSeason'		=> 'Saison actuelle',
@@ -303,7 +303,7 @@ $TopMenuLang = array(
 'FreeAgents'		=> 'Agents libres',
 'Players'		=> 'Joueurs',
 'Goalies'		=> 'Gardiens',
-'Team/GM'		=> 'Équipes/DG',
+'Team/GM'		=> 'Équipes / DG',
 'TradeHistory'		=> 'Historique de transactions',
 'LeagueRecords'		=> 'Records de la ligue',
 'TeamRecords'		=> 'Records d’équipes',
@@ -317,7 +317,7 @@ $TopMenuLang = array(
 'WebClient'		=> 'Editeur formations et lignes d’équipes en ligne',
 'Prospects'			=> 'Espoirs',
 'AvailableForTrade'			=> 'Disponible pour échange',
-'InjurySuspension'		=> 'Blessure/Suspension',
+'InjurySuspension'		=> 'Blessure / Suspension',
 'CareerTeamStat'			=> 'Statistiques d’équipe en carrière',
 'Finance'		=> 'Finance',
 'SeasonStat'		=> 'Statistiques de la saison',
@@ -377,4 +377,5 @@ $TopMenuLang = array(
 );
 
 /* End Core FR Language Pack */
+
 ?>

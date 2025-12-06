@@ -10,11 +10,11 @@ $IndexLang = array(
 'News'		=> ' Actualité',
 'By'		=> ' Par',
 'On'		=> ' Le',
-'Top5Point'		=> ' Top 5 Points',
-'Top5Goal'		=> ' Top 5 Buts',
-'Top5Goalies'		=> ' Top 5 Gardiens',
-'Top5Defenseman'		=> ' Top 5 Défenseurs',
-'Top5Rookies'		=> ' Top 5 Recrues',
+'Top5Point'		=> 'Top 5 Points',
+'Top5Goal'		=> 'Top 5 Buts',
+'Top5Goalies'		=> 'Top 5 Gardiens',
+'Top5Defenseman'		=> 'Top 5 Défenseurs',
+'Top5Rookies'		=> 'Top 5 Recrues',
 'TopFreeAgents'		=> 'Top 50 Agents libres',
 'Viewcomments'		=> 'Voir commentaires',
 'Comment'		=> 'Nouveau commentaire',
@@ -87,7 +87,7 @@ $WebClientLang = array(
 'ErrorFarmTicket'	=>	'Prix du billet Farm incorrect. Le niveau 1 doit être supérieur au niveau 2.',
 'EditConfirm'		=> 'Édition Confirmé.',
 'EditFail'		=> '<span style="color:red">Échec de l\'édition!</span>',
-'EditConfirm'		=> 'Éditer information des joueurs',
+'EditPlayer'		=> 'Éditer information des joueurs',
 );
 
 $SendEmailLang = array(
@@ -145,10 +145,10 @@ $TradeLang = array(
 'PendingTrade'		=> 'Il y a un échange en attente pour une équipe. Veuillez confirmer ou refuser l’échange avant d’en créer un nouveau.',
 'ConfirmTrade'		=> 'Échanges confirmés',
 'ViewConfirmTrade'		=> 'Afficher les échanges confirmés',
-'ViewConfirmTradeNotFound'		=> 'Il n’y pas aucun échange confirmé',
+'ViewConfirmTradeNotFound'		=> 'Aucun échange confirmé.',
 'PendingTrade'		=> 'Échanges en attentes',
 'ViewPendingTrade'		=> 'Afficher les échanges en attentes',
-'ViewPendingTradeNotFound'		=> 'Il n’y pas d’échange en attente',
+'ViewPendingTradeNotFound'		=> 'Aucun échange en attente.',
 'FailPlayerUpdate'			=> 'Échec de mise à jour du joueur dans la base de données',
 'TradeDeadline'		=> 'La date limite d’échange est passée!',
 'IllegalAction'			=> 'Action Illégal!',
@@ -179,4 +179,5 @@ $LeagueInformationLang = array(
 );
 
 /* End Main FR Language Pack */
+
 ?>

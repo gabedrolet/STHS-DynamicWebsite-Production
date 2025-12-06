@@ -40,8 +40,8 @@ Function PrintMainNews($row, $IndexLang, $dbNews, $ImagesCDNPath ){
 			If ($ReplyRow['TeamNumber'] > 0){echo " (";If ($ReplyRow['TeamThemeID'] > 0){echo "<img src=\"" . $ImagesCDNPath . "/images/" . $ReplyRow['TeamThemeID'] .".png\" alt=\"\" class=\"STHSIndex_TheNewsTeamImage\">";}echo $ReplyRow['Name'] . ") ";}
 			echo "</span> <span class=\"STHSIndex_NewsReplyTime\">" . $IndexLang['On'] . " " . $Date->format('jS F / g:ia ') . "</span> : " . $ReplyRow['Message'] . "</td></tr>";			
 		}}
-		echo "<tr><td><a href=\"NewsEditor.php?ReplyNews=" . $row['Number'] . "\">" . $IndexLang['Comment'] . "</a><hr /></td></tr>";
 		echo "</tbody></table>";
+		echo "<div style='margin-top: 10px;'><a href=\"NewsEditor.php?ReplyNews=" . $row['Number'] . "\">" . $IndexLang['Comment'] . "</a></div><hr />\n";
 	
 	}else{
 		/* No Reply, print link to create the first reply */

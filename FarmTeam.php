@@ -275,7 +275,8 @@ If ($TeamInfo['TeamThemeID'] > 0){
 #tablesorter_colSelect6:checked + label {background: var(--main-button-hover);}
 #tablesorter_colSelect6:checked ~ #tablesorter_ColumnSelector6 {display: block;}
 @media screen and (max-width: 1200px){
-	.STHSPHPTeam_HomeTable td:nth-child(2){display:none;}
+	.STHSPHPTeam_HomePrimaryTableTeamImag {text-align: center;}
+	.STHSPHPTeam_HomePrimaryTableTeamInfo {display: none;}
 	.STHSPHPTeam_HomeTeamStatC {display: block !important; width:400px;} 
 }
 @media screen and (max-width: 992px) {
@@ -333,7 +334,7 @@ If ($TeamInfo <> Null){
 <?php 
 echo "<div class=\"tabsmain standard\"><ul class=\"tabmain-links\">";
 echo "<li><a href=\"ProTeam.php?Team=" . $Team . "\">"; if ($TeamProInfo != Null){echo $TeamProInfo['Name'];} echo "</a></li>";
-echo "<li";if($SubMenu ==0){echo " class=\"activemain\"";} echo "><a href=\"#tabmain0\">" . $TeamLang['Home'] . "</a></li>";
+echo "<li";if($SubMenu ==0){echo " class=\"activemain\"";} echo "><a href=\"#tabmain0\">" . $TeamLang['TeamHome'] . "</a></li>";
 echo "<li";if($SubMenu ==1){echo " class=\"activemain\"";} echo "><a href=\"#tabmain1\">" . $TeamLang['Roster'] . "</a></li>";
 echo "<li";if($SubMenu ==2){echo " class=\"activemain\"";} echo "><a href=\"#tabmain2\">" . $TeamLang['Scoring'] . "</a></li>";
 echo "<li";if($SubMenu ==3){echo " class=\"activemain\"";} echo "><a href=\"#tabmain3\">" . $TeamLang['PlayersInfo'] . "</a></li>";

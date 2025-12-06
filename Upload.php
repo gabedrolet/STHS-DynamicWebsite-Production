@@ -35,7 +35,7 @@ input[type="file"] {
 <?php include "Menu.php";?>
 <br>
 
-<div style="width:95%;margin:auto;">
+<div class="STHSUpload_MainDiv" style="width:95%;margin:auto;">
 <h1><?php echo $UploadLang['UploadLine'];?></h1>
 <?php If ($CookieTeamNumber == 0 AND $DoNotRequiredLoginDynamicWebsite == FALSE){echo "<div class=\"STHSDivInformationMessage\">" . $NoUserLogin . "<br><br></div>";}?>
 

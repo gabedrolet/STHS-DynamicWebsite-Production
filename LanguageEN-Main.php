@@ -10,11 +10,11 @@ $IndexLang = array(
 'News'		=> ' News',
 'By'		=> ' By',
 'On'		=> ' On',
-'Top5Point'		=> ' Top 5 Points',
-'Top5Goal'		=> ' Top 5 Goals',
-'Top5Goalies'		=> ' Top 5 Goalies',
-'Top5Defenseman'		=> ' Top 5 Defenseman',
-'Top5Rookies'		=> ' Top 5 Rookies',
+'Top5Point'		=> 'Top 5 Points',
+'Top5Goal'		=> 'Top 5 Goals',
+'Top5Goalies'		=> 'Top 5 Goalies',
+'Top5Defenseman'		=> 'Top 5 Defenseman',
+'Top5Rookies'		=> 'Top 5 Rookies',
 'TopFreeAgents'		=> 'Top 50 Free Agents',
 'Viewcomments'		=> 'View comments',
 'Comment'		=> 'New Comment',
@@ -144,8 +144,8 @@ $TradeLang = array(
 'NoTrade'		=> 'No Trade to Confirm for ',
 'PendingTrade'		=> 'There is pending trade for one of the team. Please confirm or refuse pending trade before creating a new one.',
 'ConfirmTrade'		=> 'Confirm Trades',
-'ViewConfirmTrade'		=> 'View Confirm Trades',
-'ViewConfirmTradeNotFound'		=> 'There is no trade confirm.',
+'ViewConfirmTrade'		=> 'View Confirmed Trades',
+'ViewConfirmTradeNotFound'		=> 'There is no trade confirmed.',
 'PendingTrade'		=> 'Pending Trades',
 'ViewPendingTrade'		=> 'View Pending Trades',
 'ViewPendingTradeNotFound'		=> 'There is no pending trade.',
@@ -179,4 +179,5 @@ $LeagueInformationLang = array(
 );
 
 /* End Main EN Language Pack */
+
 ?>
