@@ -1,6 +1,6 @@
 function valChange(field,type,sid,updown,BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK,
 						ProForceGameStrategiesTo,ProForceGameStrategiesAt5,FarmForceGameStrategiesTo,FarmForceGameStrategiesAt5,
-						PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax){
+						PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,FullFarmEnableGlobal,FullFarmEnableLocal,LeagueType){
 
 	var fieldvalue = parseInt(document.getElementById(field).value);
 	var curvalue = (updown == 'up') ? fieldvalue + 1 : fieldvalue - 1;
@@ -127,7 +127,7 @@ function valChange(field,type,sid,updown,BlockPlayerFromPlayingLines12,BlockPlay
 	}
 	line_validator(BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK,
 						ProForceGameStrategiesTo,ProForceGameStrategiesAt5,FarmForceGameStrategiesTo,FarmForceGameStrategiesAt5,
-						PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax);	
+						PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,FullFarmEnableGlobal,FullFarmEnableLocal,LeagueType);	
 }
 function switchValues(id1, id2){
 	if(parseInt(document.getElementById(id1).value) < parseInt(document.getElementById(id2).value)){
@@ -365,7 +365,7 @@ function findPlayerInRoster(selected,type,league){
 
 	return foundIt;
 }
-function ChangePlayer(id,league,BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK,ProForceGameStrategiesTo,ProForceGameStrategiesAt5,FarmForceGameStrategiesTo,FarmForceGameStrategiesAt5,PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,customOT){
+function ChangePlayer(id,league,BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK,ProForceGameStrategiesTo,ProForceGameStrategiesAt5,FarmForceGameStrategiesTo,FarmForceGameStrategiesAt5,PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,FullFarmEnableGlobal,FullFarmEnableLocal,LeagueType,customOT){
 	var selected = document.querySelector('input[name="sltPlayerList"]:checked').value;
 	var explode = selected.split("|");
 	var groups = getGroups();
@@ -403,7 +403,7 @@ function ChangePlayer(id,league,BlockPlayerFromPlayingLines12,BlockPlayerFromPla
 		document.getElementById(id).value = explode[0];
 		line_validator(BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK,
 						ProForceGameStrategiesTo,ProForceGameStrategiesAt5,FarmForceGameStrategiesTo,FarmForceGameStrategiesAt5,
-						PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,customOT);
+						PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,FullFarmEnableGlobal,FullFarmEnableLocal,LeagueType,customOT);
 	};
 }
 function verifyBlockPlayerFromPlaying(Lines12,Lines123,Lines12inPPPK){
@@ -447,12 +447,14 @@ function verifyBlockPlayerFromPlaying(Lines12,Lines123,Lines12inPPPK){
 					lineid = ssuse[s] + ppuse[p];
 					player = document.getElementById(lineid).value;
 					
-					if(inArray(player,check)){
-						errortext += '<div class="erroritem">'+ duplicateText +'</div>';
-						break;
-					}else{
-						check.push(player);
-					}	
+					if(player !== ""){
+						if(inArray(player,check)){
+							errortext += '<div class="erroritem">'+ duplicateText +'</div>';
+							break;
+						}else{
+							check.push(player);
+						}	
+					}
 				}
 			}
 		}		
@@ -633,24 +635,32 @@ function verifyBlockPlayerFromPlaying(Lines12,Lines123,Lines12inPPPK){
 	
 	return errortext;
 }
-function line_validator(BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK,ProForceGameStrategiesTo,ProForceGameStrategiesAt5,FarmForceGameStrategiesTo,FarmForceGameStrategiesAt5,PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,customOT){
+function line_validator(BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK,ProForceGameStrategiesTo,ProForceGameStrategiesAt5,FarmForceGameStrategiesTo,FarmForceGameStrategiesAt5,PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,FullFarmEnableGlobal,FullFarmEnableLocal,LeagueType,customOT){
 	var headertext = '';
 	var headerstyle = '';
 	var display = '';
 	var disabled = '';
-
-	var lines = verifyLines(customOT);
-	var blockplayer = verifyBlockPlayerFromPlaying(BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK);
+	
 	var strat = verifyStrat();
 	var linetime = verifyTime();
+	var blockplayer = verifyBlockPlayerFromPlaying(BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK);
 	
-
-	
+    if (LeagueType === 901 && !FullFarmEnableGlobal && !FullFarmEnableLocal) {
+		console.log("League is Farm and both FullFarm are false, Partial Lines Check");
+		var lines  = '';
+	} else {
+		console.log("Full Lines Check");
+		var lines = verifyLines(customOT);
+    }
 	
 	var errors = lines + strat + linetime + blockplayer;
 	
 	if(errors.trim() === ""){
-		headertext = "Lines are Complete";
+		if (LeagueType === 901 && !FullFarmEnableGlobal && !FullFarmEnableLocal) {
+			headertext = "Lines are Complete because Full Farm is not Activate";
+		}else{
+			headertext = "Lines are Complete";
+		}
 		headerstyle = "linescomplete";
 		disabled = false;
 	}else{
@@ -690,7 +700,7 @@ function clean_position_list(){
     
     return positions;
 }
-function auto_lines(League,BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK,ProForceGameStrategiesTo,ProForceGameStrategiesAt5,FarmForceGameStrategiesTo,FarmForceGameStrategiesAt5,PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,customOT){
+function auto_lines(League,BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK,ProForceGameStrategiesTo,ProForceGameStrategiesAt5,FarmForceGameStrategiesTo,FarmForceGameStrategiesAt5,PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,FullFarmEnableGlobal,FullFarmEnableLocal,LeagueType,customOT){
 	
 	var intLeague = (League == 'Farm') ? 1: 0;
 	var positions = make_position_list();
@@ -700,18 +710,92 @@ function auto_lines(League,BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingL
 	var player;
 	var use;
 	var d = 0;
-	
+
 	// Auto Forward Lines
-	for(g=0;g<=3;g++){
-		use = 0;
-		for(p=0;p<=2;p++){
-			id = groups[g][p];
-			use = (!(g in positions[intLeague][p])) ? 0 : g;
-			player = positions[intLeague][p][use];
-			document.getElementById(id).value = player;
-		}	
+	// Utility: pick first candidate respecting used set and avoiding duplicates inside the current set
+	function pickFirstUnused(primary, fallback, used, avoidSet = new Set()) {
+	  const pickFrom = (arr, allowUsed = false) => {
+		if (!Array.isArray(arr)) return null;
+		for (let raw of arr) {
+		  const name = String(raw).split(',')[0].trim();
+		  if ((!used.has(name) || allowUsed) && !avoidSet.has(name)) return name;
+		}
+		return null;
+	  };
+
+	  // try primary unused
+	  let name = pickFrom(primary, false);
+	  if (name) return name;
+
+	  // try fallback unused
+	  name = pickFrom(fallback, false);
+	  if (name) return name;
+
+	  // fallback exhausted: return first fallback even if already used, but still avoid names already in the current set
+	  return pickFrom(fallback, true);
 	}
 
+	// Build sets for a given league index (default 0)
+	function buildSets(leagueIndex = 0) {
+	  const sets = [];
+	  const used = new Set();
+
+	  const primary0 = (positions[leagueIndex] && positions[leagueIndex][0]) || [];
+	  const primary1 = (positions[leagueIndex] && positions[leagueIndex][1]) || [];
+	  const primary2 = (positions[leagueIndex] && positions[leagueIndex][2]) || [];
+	  const fallback = (positions[leagueIndex] && positions[leagueIndex][5]) || [];
+
+	  for (let setIndex = 0; setIndex < 4; setIndex++) {
+		const set = [];
+
+		// Step: first name
+		if (setIndex === 0) {
+		  // force first set first name to the very first element of primary0 (if exists)
+		  const forced = primary0.length > 0 ? String(primary0[0]).split(',')[0].trim() : null;
+		  if (forced) {
+			set.push(forced);
+			used.add(forced);
+		  } else {
+			// fallback if primary0 empty
+			const f = pickFirstUnused(fallback, fallback, used, new Set(set));
+			set.push(f);
+			if (f) used.add(f);
+		  }
+		} else {
+		  const first = pickFirstUnused(primary0, fallback, used, new Set(set));
+		  set.push(first);
+		  if (first) used.add(first);
+		}
+
+		// Step: second name (from primary1 then fallback)
+		const second = pickFirstUnused(primary1, fallback, used, new Set(set));
+		set.push(second);
+		if (second) used.add(second);
+
+		// Step: third name (from primary2 then fallback)
+		const third = pickFirstUnused(primary2, fallback, used, new Set(set));
+		set.push(third);
+		if (third) used.add(third);
+
+		sets.push(set);
+	  }
+
+	  return sets;
+	}
+
+	const sets = buildSets(intLeague);
+	console.log(sets);
+	
+	for (let idx = 0; idx < sets.length; idx++) {
+	  const set = sets[idx];
+	  for (let pos = 0; pos < set.length; pos++) {
+		const name = set[pos];
+		id = groups[idx][pos];
+		document.getElementById(id).value = name;
+	  }
+	}
+
+	
 	// Auto Defense lines
 	for(g=4;g<=7;g++){
 		use = 0;
@@ -726,18 +810,17 @@ function auto_lines(League,BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingL
 	}
 	
 	// Auto Power Play Lines
-	for(g=8;g<=9;g++){
-		use = (g == 8) ? 0 : 1;
-		d = (g == 8) ? 0 : 2;
-		for(p=0;p<=3;p++){
-			if(p == 3){
-				document.getElementById(groups[g][p]).value = positions[intLeague][p][d];
-				document.getElementById(groups[g][p+1]).value = positions[intLeague][p][d+1];
-			}else{
-				document.getElementById(groups[g][p]).value = positions[intLeague][p][use];
-			}
-		}
-	}
+	document.getElementById(groups[8][0]).value = document.getElementById(groups[0][0]).value
+	document.getElementById(groups[8][1]).value = document.getElementById(groups[0][1]).value
+	document.getElementById(groups[8][2]).value = document.getElementById(groups[0][2]).value
+	document.getElementById(groups[8][3]).value = document.getElementById(groups[4][0]).value
+	document.getElementById(groups[8][4]).value = document.getElementById(groups[4][1]).value
+	document.getElementById(groups[9][0]).value = document.getElementById(groups[1][0]).value
+	document.getElementById(groups[9][1]).value = document.getElementById(groups[1][1]).value
+	document.getElementById(groups[9][2]).value = document.getElementById(groups[1][2]).value
+	document.getElementById(groups[9][3]).value = document.getElementById(groups[5][0]).value
+	document.getElementById(groups[9][4]).value = document.getElementById(groups[5][1]).value	
+	
 
 	// Auto 4vs4 and PK4 Lines
 	for(g=10;g<=13;g++){
@@ -790,18 +873,16 @@ function auto_lines(League,BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingL
 	}
 
 	// Auto Last Minute Lines
-	for(g=24;g<=25;g++){
-		use = 0;
-		d = 0;
-		for(p=0;p<=3;p++){
-			if(p == 3){
-				document.getElementById(groups[g][p]).value = positions[intLeague][p][d];
-				document.getElementById(groups[g][p+1]).value = positions[intLeague][p][d+1];
-			}else{
-				document.getElementById(groups[g][p]).value = positions[intLeague][p][use];
-			}
-		}
-	}
+	document.getElementById(groups[24][0]).value = document.getElementById(groups[0][0]).value
+	document.getElementById(groups[24][1]).value = document.getElementById(groups[0][1]).value
+	document.getElementById(groups[24][2]).value = document.getElementById(groups[0][2]).value
+	document.getElementById(groups[24][3]).value = document.getElementById(groups[4][0]).value
+	document.getElementById(groups[24][4]).value = document.getElementById(groups[4][1]).value
+	document.getElementById(groups[25][0]).value = document.getElementById(groups[1][0]).value
+	document.getElementById(groups[25][1]).value = document.getElementById(groups[1][1]).value
+	document.getElementById(groups[25][2]).value = document.getElementById(groups[1][2]).value
+	document.getElementById(groups[25][3]).value = document.getElementById(groups[5][0]).value
+	document.getElementById(groups[25][4]).value = document.getElementById(groups[5][1]).value	
 
 	// Auto OT Forwards & Defense
 	if(customOT){
@@ -821,7 +902,7 @@ function auto_lines(League,BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingL
 	}
 	line_validator(BlockPlayerFromPlayingLines12,BlockPlayerFromPlayingLines123,BlockPlayerFromPlayingLines12inPPPK,
 						ProForceGameStrategiesTo,ProForceGameStrategiesAt5,FarmForceGameStrategiesTo,FarmForceGameStrategiesAt5,
-						PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,customOT);	
+						PullGoalerMinGoal,PullGoalerMinGoalEnforce,PullGoalerMinPct,PullGoalerRemoveGoaliesSecond,PullGoalerMax,FullFarmEnableGlobal,FullFarmEnableLocal,LeagueType,customOT);	
 }
 function checkCompleteLines(){
 	var headertext = '';

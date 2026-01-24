@@ -210,6 +210,7 @@ function roster_validator(	MaximumPlayerPerTeam,MinimumPlayerPerTeam,isWaivers,B
 		}
 		else { // Not full farm. 
 			if(farmDress[6][g] > FarmFullRoster){errorText += '<div class="erroritem playercount notenoughfarmdressed">Full farm not enabled. You need to dress at least one player less than a full roster.</div>';}
+			if(farmDress[6][g] - farmDress[4][g] > FarmPlayerInGame -1 ){errorText += '<div class="erroritem playercount limitfarmdressed">Too many Farm Dress players.</div>';}			
 		} 
 		if(playerCount > MaximumPlayerPerTeam){errorText += '<div class="erroritem playercount toomanyplayers">Too many players on your roster.</div>';}
 		if(playerCount < MinimumPlayerPerTeam){errorText += '<div class="erroritem playercount notenoughplayers">Not enough players on your roster.</div>';}
