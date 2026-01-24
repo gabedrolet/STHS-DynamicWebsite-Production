@@ -184,7 +184,7 @@ If (file_exists($DatabaseFile) == false){
 				}
 				$TeamStatSub = $db->query($Query);
 				
-				$Title = $Title  . " - " . $SearchLang['Year'] . " " . $Year;
+				$Title = $Title  . " - " . $TopMenuLang['Year'] . " " . $Year;
 				If ($Playoff == True){$Title = $Title . $TopMenuLang['Playoff'];}				
 				
 			}

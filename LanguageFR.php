@@ -91,6 +91,7 @@ $SearchLang = array(
 'PlayersStatsHistory'		=> 'Recherche dans l’historique des statistiques des joueurs',
 'GoaliesStatsHistory'		=> 'Recherche dans l’historique des statistiques des gardiens',
 'TeamStatsHistory'		=> 'Recherche dans l’historique des statistiques des équipes ou des équipes contre',
+'TeamHistory'		=> 'Recherche dans l’historique des équipes',
 'PlayersInformationHistory'		=> 'Recherche dans l’historique des informations des joueurs',
 'TeamStatVS'			=> 'Statistiques d’équipes VS pour',
 'NoNewsFound'	=> 'Aucune nouvelle trouvée dans la base de données des nouvelles. Veuillez en créer une nouvelle.',
@@ -257,7 +258,7 @@ $DynamicTitleLang = array(
 'Retire'			=> 'Retraite',
 'ComparePlayers'			=> 'Comparer joueurs',
 'CompareGoalies'			=> 'Comparer gardiens',
-'PreviousStanding'		=> 'Classement pour l’année - ',
+'PreviousStanding'		=> 'Classement pour l’année ',
 'Players'		=> 'Joueurs',
 'Goalies'		=> 'Gardiens',
 'Leaderboard'		=> 'Tableau des meneurs',
@@ -328,7 +329,7 @@ $TopMenuLang = array(
 'Playoff'			=> ' - Séries éliminatoires',
 'Retire'			=> 'Joueurs retraités',
 'Compare'			=> 'Comparateur de joueurs',
-'PreviousStanding'		=> 'Classement année précédent',
+'PreviousStanding'		=> 'Classement année précédent ',
 'SearchHistory'		=> 'Recherche dans l’historique',
 'AllStar'		=> 'Match des Étoiles',
 'CupWinner'		=> 'Gagnants de la Coupe Stanley',
@@ -377,5 +378,4 @@ $TopMenuLang = array(
 );
 
 /* End Core FR Language Pack */
-
 ?>

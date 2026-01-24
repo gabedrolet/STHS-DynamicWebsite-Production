@@ -157,7 +157,7 @@ If (file_exists($DatabaseFile) == false){
 				If ($MaximumResult > 0){$Query = $Query . " LIMIT " . $MaximumResult;}
 				$GoalieStat = $db->query($Query);
 
-				$Title = $Title  . " - " . $SearchLang['Year'] . " " . $Year;
+				$Title = $Title . " - " . $TopMenuLang['Year'] . " " . $Year;
 				if(isset($_GET['MinGP'])){$Title = $Title . " - " . $TopMenuLang['MinimumGamesPlayed'] . $MinimumGP;}
 				If ($Playoff == True){$Title = $Title . $TopMenuLang['Playoff'];}	
 			}

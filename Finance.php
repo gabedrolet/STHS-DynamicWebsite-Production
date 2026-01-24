@@ -43,7 +43,7 @@ If (file_exists($DatabaseFile) == false){
 			
 			$LeagueName = $LeagueGeneral['Name'];			
 			
-			$Title = $LeagueName . " - " . $TeamLang['Finance'] . " - " . $Year;
+			$Title = $LeagueName . " - " . $TeamLang['Finance'] . " - " . $TopMenuLang['Year'] . " " . $Year;
 			If ($Playoff == True){$Title = $Title . $TopMenuLang['Playoff'];}
 		}else{
 			Goto RegularSeason;

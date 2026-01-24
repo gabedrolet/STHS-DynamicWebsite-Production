@@ -33,7 +33,7 @@ If (file_exists($DatabaseFile) == false){
 	$Query = "Select PlayersMugShotBaseURL, PlayersMugShotFileExtension,OutputSalariesRemaining,WebsiteURL from LeagueOutputOption";
 	$LeagueOutputOption = $db->querySingle($Query,true);		
 }
-If ($Goalie == 0){
+If ($Goalie == 0 OR $Goalie == Null){
 	$GoalieInfo = Null;
 	$GoalieProStat = Null;
 	$GoalieFarmStat = Null;	
@@ -114,6 +114,7 @@ If ($Goalie == 0){
 		$GoalieProStat = Null;
 		$GoalieFarmStat = Null;	
 		$TeamInfo = Null;
+		echo "<title>" . $LeagueName . "</title>";
 		echo "<style>.STHSPHPPlayerStat_Main {display:none;}</style>";
 	}
 }} catch (Exception $e) {

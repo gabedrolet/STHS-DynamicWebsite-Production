@@ -110,20 +110,20 @@ echo "<th title=\"Visitor Only\" class=\"STHSW75\">" . $TeamLang['Visitor'] ."</
 echo "</tr></thead><tbody>";
 }
 
-Function PrintStandingTable($Standing, $TypeText, $StandardStandingOutput, $PointSystemSO, $PointSystemW, $ColumnPerTable, $LinesNumber,$DatabaseFile){
+Function PrintStandingTable($Standing, $TypeText, $StandardStandingOutput, $PointSystemSO, $PointSystemW, $ColumnPerTable, $LinesNumber, $DatabaseFile, $Year){
 $LoopCount =0;
 while ($row = $Standing ->fetchArray()) {
 	$LoopCount +=1;
-	PrintStandingTableRow($row, $TypeText, $StandardStandingOutput, $PointSystemSO, $PointSystemW, $LoopCount,$DatabaseFile);
+	PrintStandingTableRow($row, $TypeText, $StandardStandingOutput, $PointSystemSO, $PointSystemW, $LoopCount, $DatabaseFile, $Year);
 	If ($LoopCount > 0 AND $LoopCount == $LinesNumber){echo "<tr class=\"static\"><td class=\"staticTD\" colspan=\"" . $ColumnPerTable . "\"><hr /></td></tr>";}
 }
 echo "</tbody></table>";
 }
 
-Function PrintStandingTableRow($row, $TypeText, $StandardStandingOutput, $PointSystemSO, $PointSystemW, $LoopCount,$DatabaseFile){
+Function PrintStandingTableRow($row, $TypeText, $StandardStandingOutput, $PointSystemSO, $PointSystemW, $LoopCount, $DatabaseFile, $Year){
 	echo "<tr><td>" . $LoopCount . "</td>";
 	echo "<td><span class=\"" . $TypeText . "Standing_Team" . $LoopCount . "\"></span>";
-	echo "<a href=\"" . $TypeText . "Team.php?Team=" . $row['Number'] . "\">" . $row['Name'] . "</a></td>";
+	echo "<a href=\"" . $TypeText . "Team.php?Year=" . $Year . "&Team=" . $row['Number'] . "\">" . $row['Name'] . "</a></td>";
 	echo "<td>" . $row['GP'] . "</td>";
 	If ($StandardStandingOutput == "True"){
 		echo "<td>" . ($row['W'] + $row['OTW'] + $row['SOW']) . "</td>";
@@ -214,7 +214,7 @@ If ($DatabaseFound == True){
 	$LoopCount =0;
 	if (empty($Standing) == false){while ($row = $Standing ->fetchArray()) {
 		$LoopCount +=1;
-		PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount,$DatabaseFile);
+		PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount, $DatabaseFile, $Year);
 	}}
 		
 	/* Division 2 */	
@@ -224,7 +224,7 @@ If ($DatabaseFound == True){
 	$LoopCount =0;
 	if (empty($Standing) == false){while ($row = $Standing ->fetchArray()) {
 		$LoopCount +=1;
-		PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount,$DatabaseFile);
+		PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount, $DatabaseFile, $Year);
 	}}
 
 	/* Overall for Conference 1 */	
@@ -234,7 +234,7 @@ If ($DatabaseFound == True){
 	$LoopCount =0;
 	if (empty($Standing) == false){while ($row = $Standing ->fetchArray()) {
 		$LoopCount +=1;
-		If ($LoopCount > 6 ){PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount,$DatabaseFile);}
+		If ($LoopCount > 6 ){PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount, $DatabaseFile, $Year);}
 		If ($LoopCount == 8){echo "<tr class=\"static\"><td class=\"staticTD\" colspan=\"" . $ColumnPerTable . "\"><hr /></td></tr>";}
 	}}
 
@@ -251,7 +251,7 @@ If ($DatabaseFound == True){
 	$LoopCount =0;
 	if (empty($Standing) == false){while ($row = $Standing ->fetchArray()) {
 		$LoopCount +=1;
-		PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount,$DatabaseFile);
+		PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount, $DatabaseFile, $Year);
 	}}
 		
 	/* Division 5 */	
@@ -261,7 +261,7 @@ If ($DatabaseFound == True){
 	$LoopCount =0;
 	if (empty($Standing) == false){while ($row = $Standing ->fetchArray()) {
 		$LoopCount +=1;
-		PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount,$DatabaseFile);
+		PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount, $DatabaseFile, $Year);
 	}}
 
 	/* Overall for Conference 2 */	
@@ -271,7 +271,7 @@ If ($DatabaseFound == True){
 	$LoopCount =0;
 	if (empty($Standing) == false){while ($row = $Standing ->fetchArray()) {
 		$LoopCount +=1;
-		If ($LoopCount > 6 ){PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount,$DatabaseFile);}
+		If ($LoopCount > 6 ){PrintStandingTableRow($row, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $LoopCount, $DatabaseFile, $Year);}
 		If ($LoopCount == 8){echo "<tr class=\"static\"><td class=\"staticTD\" colspan=\"" . $ColumnPerTable . "\"><hr /></td></tr>";}
 	}}
 
@@ -293,9 +293,9 @@ If ($DatabaseFound == True){
 			echo "<h2>" . $Value . "</h2>";
 			PrintStandingTop($TeamLang, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO']);
 			If ($LeagueSimulation['TwoConference'] == "True"){
-				PrintStandingTable($Standing, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $ColumnPerTable, $LeagueGeneral['HowManyPlayOffTeam']/2,$DatabaseFile);
+				PrintStandingTable($Standing, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $ColumnPerTable, $LeagueGeneral['HowManyPlayOffTeam']/2, $DatabaseFile, $Year);
 			}else{
-				PrintStandingTable($Standing, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $ColumnPerTable, $LeagueGeneral['HowManyPlayOffTeam'],$DatabaseFile);
+				PrintStandingTable($Standing, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $ColumnPerTable, $LeagueGeneral['HowManyPlayOffTeam'], $DatabaseFile, $Year);
 			}
 		}
 	}
@@ -312,7 +312,7 @@ If ($DatabaseFound == True){
 		if($DataReturn->fetchArray()){ /* Only Print Information if Query has row */
 			echo "<h2>" . $Value . "</h2>";
 			PrintStandingTop($TeamLang, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO']);
-			PrintStandingTable($Standing, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'],$ColumnPerTable,0,$DatabaseFile);
+			PrintStandingTable($Standing, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $ColumnPerTable, 0 , $DatabaseFile, $Year);
 		}
 	}
 }
@@ -325,7 +325,7 @@ If ($DatabaseFound == True){
 	$Query = "SELECT Team" . $TypeTextTeam . "StatHistory.*, RankingOrder.TeamOrder FROM Team" . $TypeTextTeam . "StatHistory INNER JOIN RankingOrder ON Team" . $TypeTextTeam . "StatHistory.Number = RankingOrder.Team" . $TypeText . "Number WHERE (((RankingOrder.Type)=0)) AND Team" . $TypeTextTeam . "StatHistory.Year = " . $Year . " And Team" . $TypeTextTeam . "StatHistory.Playoff = '" . $PlayoffString . "' AND RankingOrder.Year = " . $Year . " And RankingOrder.Playoff = '" . $PlayoffString . "' ORDER BY RankingOrder.TeamOrder";
 	$Standing = $db->query($Query);
 	PrintStandingTop($TeamLang, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO']);
-	PrintStandingTable($Standing, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'],$ColumnPerTable,0,$DatabaseFile);
+	PrintStandingTable($Standing, $TypeText, $LeagueOutputOption['StandardStandingOutput'], $LeagueGeneral['PointSystemSO'], $LeagueGeneral['PointSystemW'], $ColumnPerTable, 0 , $DatabaseFile, $Year);
 }
 ?>
 
@@ -359,28 +359,28 @@ If ($DatabaseFound == True){
 		echo "<tr>";
 		If ($Row['Round1'] == 0){echo "<td></td>";}else{
 			$Round1 = $db->querySingle("SELECT Playoff" . $TypeText . ".*, TeamInfoHome.Name as HomeTeamName, TeamInfoVisitor.Name as VisitorTeamName FROM (Playoff" . $TypeText . " INNER JOIN Team" . $TypeText . "InfoHistory AS TeamInfoHome ON Playoff" . $TypeText . ".HomeTeam = TeamInfoHome.Number) LEFT JOIN Team" . $TypeText . "InfoHistory AS TeamInfoVisitor ON Playoff" . $TypeText . ".VisitorTeam = TeamInfoVisitor.Number WHERE Playoff" . $TypeText . ".Number = " . $Row['Round1'] . " AND Playoff" . $TypeTextTeam . ".Year = " . $Year . " And TeamInfoHome.Year = " . $Year . " and TeamInfoVisitor.Year = " . $Year ,true);	
-			echo "<td><a href=\"" . $TypeText . "Team.php?Team=" . $Round1['VisitorTeam'] . "\">" . $Round1['VisitorTeamName'] . " - " . $Round1['VisitorWin'] . "</a><br>";
-			echo "<a href=\"" . $TypeText . "Team.php?Team=" . $Round1['HomeTeam'] . "\">" . $Round1['HomeTeamName'] . " - " . $Round1['HomeWin'] . "</a><br><br></td>";
+			echo "<td><a href=\"" . $TypeText . "Team.php?Year=" . $Year . "&Team=" . $Round1['VisitorTeam'] . "\">" . $Round1['VisitorTeamName'] . " - " . $Round1['VisitorWin'] . "</a><br>";
+			echo "<a href=\"" . $TypeText . "Team.php?Year=" . $Year . "&Team=" . $Round1['HomeTeam'] . "\">" . $Round1['HomeTeamName'] . " - " . $Round1['HomeWin'] . "</a><br><br></td>";
 		}
 		If ($Row['Round2'] == 0){echo "<td></td>";}else{
 			$Round2 = $db->querySingle("SELECT Playoff" . $TypeText . ".*, TeamInfoHome.Name as HomeTeamName, TeamInfoVisitor.Name as VisitorTeamName FROM (Playoff" . $TypeText . " INNER JOIN Team" . $TypeText . "InfoHistory AS TeamInfoHome ON Playoff" . $TypeText . ".HomeTeam = TeamInfoHome.Number) LEFT JOIN Team" . $TypeText . "InfoHistory AS TeamInfoVisitor ON Playoff" . $TypeText . ".VisitorTeam = TeamInfoVisitor.Number WHERE Playoff" . $TypeText . ".Number = " . $Row['Round2'] . " AND Playoff" . $TypeTextTeam . ".Year = " . $Year . " And TeamInfoHome.Year = " . $Year . " and TeamInfoVisitor.Year = " . $Year,true);	
-			echo "<td><a href=\"" . $TypeText . "Team.php?Team=" . $Round2['VisitorTeam'] . "\">" . $Round2['VisitorTeamName'] . " - " . $Round2['VisitorWin'] . "</a><br>";
-			echo "<a href=\"" . $TypeText . "Team.php?Team=" . $Round2['HomeTeam'] . "\">" . $Round2['HomeTeamName'] . " - " . $Round2['HomeWin'] . "</a><br><br></td>";
+			echo "<td><a href=\"" . $TypeText . "Team.php?Year=" . $Year . "&Team=" . $Round2['VisitorTeam'] . "\">" . $Round2['VisitorTeamName'] . " - " . $Round2['VisitorWin'] . "</a><br>";
+			echo "<a href=\"" . $TypeText . "Team.php?Year=" . $Year . "&Team=" . $Round2['HomeTeam'] . "\">" . $Round2['HomeTeamName'] . " - " . $Round2['HomeWin'] . "</a><br><br></td>";
 		}
 		If ($Row['Round3'] == 0){echo "<td></td>";}else{
 			$Round3 = $db->querySingle("SELECT Playoff" . $TypeText . ".*, TeamInfoHome.Name as HomeTeamName, TeamInfoVisitor.Name as VisitorTeamName FROM (Playoff" . $TypeText . " INNER JOIN Team" . $TypeText . "InfoHistory AS TeamInfoHome ON Playoff" . $TypeText . ".HomeTeam = TeamInfoHome.Number) LEFT JOIN Team" . $TypeText . "InfoHistory AS TeamInfoVisitor ON Playoff" . $TypeText . ".VisitorTeam = TeamInfoVisitor.Number WHERE Playoff" . $TypeText . ".Number = " . $Row['Round3'] . " AND Playoff" . $TypeTextTeam . ".Year = " . $Year . " And TeamInfoHome.Year = " . $Year . " and TeamInfoVisitor.Year = " . $Year,true);	
-			echo "<td><a href=\"" . $TypeText . "Team.php?Team=" . $Round3['VisitorTeam'] . "\">" . $Round3['VisitorTeamName'] . " - " . $Round3['VisitorWin'] . "</a><br>";
-			echo "<a href=\"" . $TypeText . "Team.php?Team=" . $Round3['HomeTeam'] . "\">" . $Round3['HomeTeamName'] . " - " . $Round3['HomeWin'] . "</a><br><br></td>";
+			echo "<td><a href=\"" . $TypeText . "Team.php?Year=" . $Year . "&Team=" . $Round3['VisitorTeam'] . "\">" . $Round3['VisitorTeamName'] . " - " . $Round3['VisitorWin'] . "</a><br>";
+			echo "<a href=\"" . $TypeText . "Team.php?Year=" . $Year . "&Team=" . $Round3['HomeTeam'] . "\">" . $Round3['HomeTeamName'] . " - " . $Round3['HomeWin'] . "</a><br><br></td>";
 		}
 		If ($Row['Round4'] == 0){echo "<td></td>";}else{
 			$Round4 = $db->querySingle("SELECT Playoff" . $TypeText . ".*, TeamInfoHome.Name as HomeTeamName, TeamInfoVisitor.Name as VisitorTeamName FROM (Playoff" . $TypeText . " INNER JOIN Team" . $TypeText . "InfoHistory AS TeamInfoHome ON Playoff" . $TypeText . ".HomeTeam = TeamInfoHome.Number) LEFT JOIN Team" . $TypeText . "InfoHistory AS TeamInfoVisitor ON Playoff" . $TypeText . ".VisitorTeam = TeamInfoVisitor.Number WHERE Playoff" . $TypeText . ".Number = " . $Row['Round4'] . " AND Playoff" . $TypeTextTeam . ".Year = " . $Year . " And TeamInfoHome.Year = " . $Year . " and TeamInfoVisitor.Year = " . $Year,true);	
-			echo "<td><a href=\"" . $TypeText . "Team.php?Team=" . $Round4['VisitorTeam'] . "\">" . $Round4['VisitorTeamName'] . " - " . $Round4['VisitorWin'] . "</a><br>";
-			echo "<a href=\"" . $TypeText . "Team.php?Team=" . $Round4['HomeTeam'] . "\">" . $Round4['HomeTeamName'] . " - " . $Round4['HomeWin'] . "</a><br><br></td>";
+			echo "<td><a href=\"" . $TypeText . "Team.php?Year=" . $Year . "&Team=" . $Round4['VisitorTeam'] . "\">" . $Round4['VisitorTeamName'] . " - " . $Round4['VisitorWin'] . "</a><br>";
+			echo "<a href=\"" . $TypeText . "Team.php?Year=" . $Year . "&Team=" . $Round4['HomeTeam'] . "\">" . $Round4['HomeTeamName'] . " - " . $Round4['HomeWin'] . "</a><br><br></td>";
 		}
 		If ($Row['Round5'] == 0){echo "<td></td>";}else{
 			$Round5 = $db->querySingle("SELECT Playoff" . $TypeText . ".*, TeamInfoHome.Name as HomeTeamName, TeamInfoVisitor.Name as VisitorTeamName FROM (Playoff" . $TypeText . " INNER JOIN Team" . $TypeText . "InfoHistory AS TeamInfoHome ON Playoff" . $TypeText . ".HomeTeam = TeamInfoHome.Number) LEFT JOIN Team" . $TypeText . "InfoHistory AS TeamInfoVisitor ON Playoff" . $TypeText . ".VisitorTeam = TeamInfoVisitor.Number WHERE Playoff" . $TypeText . ".Number = " . $Row['Round5'] . " AND Playoff" . $TypeTextTeam . ".Year = " . $Year . " And TeamInfoHome.Year = " . $Year . " and TeamInfoVisitor.Year = " . $Year,true);	
-			echo "<td><a href=\"" . $TypeText . "Team.php?Team=" . $Round5['VisitorTeam'] . "\">" . $Round5['VisitorTeamName'] . " - " . $Round5['VisitorWin'] . "</a><br>";
-			echo "<a href=\"" . $TypeText . "Team.php?Team=" . $Round5['HomeTeam'] . "\">" . $Round5['HomeTeamName'] . " - " . $Round5['HomeWin'] . "</a><br><br></td>";
+			echo "<td><a href=\"" . $TypeText . "Team.php?Year=" . $Year . "&Team=" . $Round5['VisitorTeam'] . "\">" . $Round5['VisitorTeamName'] . " - " . $Round5['VisitorWin'] . "</a><br>";
+			echo "<a href=\"" . $TypeText . "Team.php?Year=" . $Year . "&Team=" . $Round5['HomeTeam'] . "\">" . $Round5['HomeTeamName'] . " - " . $Round5['HomeWin'] . "</a><br><br></td>";
 		}
 		echo "</tr>";
 	}}

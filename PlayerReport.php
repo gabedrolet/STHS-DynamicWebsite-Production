@@ -33,7 +33,7 @@ If (file_exists($DatabaseFile) == false){
 	$Query = "Select PlayersMugShotBaseURL,PlayersMugShotFileExtension,OutputSalariesRemaining,WebsiteURL from LeagueOutputOption";
 	$LeagueOutputOption = $db->querySingle($Query,true);	
 }
-If ($Player == 0){
+If ($Player == 0 OR $Player == Null){
 	$PlayerInfo = Null;
 	$PlayerProStat = Null;
 	$PlayerFarmStat = Null;	
@@ -76,7 +76,6 @@ If ($Player == 0){
 		echo "<title>" . $LeagueName . " - " . $PlayerName . "</title>";
 		If (file_exists($CareerStatDatabaseFile) == true){ /* CareerStat */
 			$CareerStatdb = new SQLite3($CareerStatDatabaseFile);
-			
 			$CareerDBFormatV2CheckCheck = $CareerStatdb->querySingle("SELECT Count(name) AS CountName FROM sqlite_master WHERE type='table' AND name='LeagueGeneral'",true);
 			If ($CareerDBFormatV2CheckCheck['CountName'] == 1){
 				
@@ -114,6 +113,7 @@ If ($Player == 0){
 		$PlayerProStat = Null;
 		$PlayerFarmStat = Null;	
 		$TeamInfo = Null;
+		echo "<title>" . $LeagueName . "</title>";
 		echo "<style>.STHSPHPPlayerStat_Main {display:none;}</style>";
 	}
 }} catch (Exception $e) {

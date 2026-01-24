@@ -19,6 +19,14 @@ $SubMenu = 0;
 if(isset($_GET['SubMenu'])){$SubMenu = filter_var($_GET['SubMenu'], FILTER_SANITIZE_NUMBER_INT);}
 if($SubMenu < 0 OR $SubMenu > 8){$SubMenu = 0;} 
 
+// History Syntax Addons
+$HistoryOutput = (boolean)False;
+$Playoff = (boolean)False;
+$PlayoffString = (string)"False";
+$Year = (integer)0;	
+if(isset($_GET['Playoff'])){$Playoff=True;$PlayoffString="True";}
+if(isset($_GET['Year'])){$Year = filter_var($_GET['Year'], FILTER_SANITIZE_NUMBER_INT);$HistoryOutput = True;} 
+
 try{
 If (file_exists($DatabaseFile) == false){
 	$Team = 0;
@@ -34,10 +42,11 @@ If($Team == 0 AND $CookieTeamNumber > 0 AND $CookieTeamNumber <= 100){$Team = $C
 If ($Team == 0 OR $Team > 100){
 	Goto STHSErrorFarmTeam;
 }else{
+If ($Year == 0){
 	$Query = "SELECT count(*) AS count FROM TeamFarmInfo WHERE Number = " . $Team;
 	$Result = $db->querySingle($Query,true);
-	If ($Result['count'] == 1){
-		If (isset($PerformanceMonitorStart)){echo "<script>console.log(\"STHS Query Start Page PHP Performance : " . (microtime(true)-$PerformanceMonitorStart) . "\"); </script>";}
+	If (isset($PerformanceMonitorStart)){echo "<script>console.log(\"STHS Query Start Page PHP Performance : " . (microtime(true)-$PerformanceMonitorStart) . "\"); </script>";}
+	If ($Result['count'] == 1){		
 		$Query = "Select PlayersMugShotBaseURL, PlayersMugShotFileExtension, OutputSalariesRemaining, InchInsteadofCM, LBSInsteadofKG, ScheduleUseDateInsteadofDay, ScheduleRealDate, ShowWebClientInDymanicWebsite,JerseyNumberInWebsite,MergeRosterPlayerInfo,MergeProFarmRoster, SeparateCareerStatFromTeamPage, FarmMinimumGamePlayerLeader,WebsiteURL from LeagueOutputOption";
 		$LeagueOutputOption = $db->querySingle($Query,true);	
 		$Query = "SELECT * FROM TeamFarmInfo WHERE Number = " . $Team;
@@ -49,9 +58,7 @@ If ($Team == 0 OR $Team > 100){
 		$Query = "SELECT * FROM TeamFarmStat WHERE Number = " . $Team;
 		$TeamStat = $db->querySingle($Query,true);
 		$Query = "SELECT MainTable.* FROM (SELECT TeamFarmStatVS.TeamVSName AS Name, TeamFarmStatVS.TeamVSNumber AS Number, TeamFarmStatVS.TeamVSNumberThemeID as TeamThemeID, TeamFarmStatVS.GP, TeamFarmStatVS.W, TeamFarmStatVS.L, TeamFarmStatVS.T, TeamFarmStatVS.OTW, TeamFarmStatVS.OTL, TeamFarmStatVS.SOW, TeamFarmStatVS.SOL, TeamFarmStatVS.Points, TeamFarmStatVS.GF, TeamFarmStatVS.GA, TeamFarmStatVS.HomeGP, TeamFarmStatVS.HomeW, TeamFarmStatVS.HomeL, TeamFarmStatVS.HomeT, TeamFarmStatVS.HomeOTW, TeamFarmStatVS.HomeOTL, TeamFarmStatVS.HomeSOW, TeamFarmStatVS.HomeSOL, TeamFarmStatVS.HomeGF, TeamFarmStatVS.HomeGA, TeamFarmStatVS.PPAttemp, TeamFarmStatVS.PPGoal, TeamFarmStatVS.PKAttemp, TeamFarmStatVS.PKGoalGA, TeamFarmStatVS.PKGoalGF, TeamFarmStatVS.ShotsFor, TeamFarmStatVS.ShotsAga, TeamFarmStatVS.ShotsBlock, TeamFarmStatVS.ShotsPerPeriod1, TeamFarmStatVS.ShotsPerPeriod2, TeamFarmStatVS.ShotsPerPeriod3, TeamFarmStatVS.ShotsPerPeriod4, TeamFarmStatVS.GoalsPerPeriod1, TeamFarmStatVS.GoalsPerPeriod2, TeamFarmStatVS.GoalsPerPeriod3, TeamFarmStatVS.GoalsPerPeriod4, TeamFarmStatVS.PuckTimeInZoneDF, TeamFarmStatVS.PuckTimeInZoneOF, TeamFarmStatVS.PuckTimeInZoneNT, TeamFarmStatVS.PuckTimeControlinZoneDF, TeamFarmStatVS.PuckTimeControlinZoneOF, TeamFarmStatVS.PuckTimeControlinZoneNT, TeamFarmStatVS.Shutouts, TeamFarmStatVS.TotalGoal, TeamFarmStatVS.TotalAssist, TeamFarmStatVS.TotalPoint, TeamFarmStatVS.Pim, TeamFarmStatVS.Hits, TeamFarmStatVS.FaceOffWonDefensifZone, TeamFarmStatVS.FaceOffTotalDefensifZone, TeamFarmStatVS.FaceOffWonOffensifZone, TeamFarmStatVS.FaceOffTotalOffensifZone, TeamFarmStatVS.FaceOffWonNeutralZone, TeamFarmStatVS.FaceOffTotalNeutralZone, TeamFarmStatVS.EmptyNetGoal FROM TeamFarmStatVS WHERE GP > 0 AND TeamNumber = " . $Team . " UNION ALL SELECT 'Total' as Name, '104' as Number, '0' as TeamThemeID, TeamFarmStat.GP, TeamFarmStat.W, TeamFarmStat.L, TeamFarmStat.T, TeamFarmStat.OTW, TeamFarmStat.OTL, TeamFarmStat.SOW, TeamFarmStat.SOL, TeamFarmStat.Points, TeamFarmStat.GF, TeamFarmStat.GA, TeamFarmStat.HomeGP, TeamFarmStat.HomeW, TeamFarmStat.HomeL, TeamFarmStat.HomeT, TeamFarmStat.HomeOTW, TeamFarmStat.HomeOTL, TeamFarmStat.HomeSOW, TeamFarmStat.HomeSOL, TeamFarmStat.HomeGF, TeamFarmStat.HomeGA,  TeamFarmStat.PPAttemp, TeamFarmStat.PPGoal, TeamFarmStat.PKAttemp, TeamFarmStat.PKGoalGA, TeamFarmStat.PKGoalGF, TeamFarmStat.ShotsFor, TeamFarmStat.ShotsAga, TeamFarmStat.ShotsBlock, TeamFarmStat.ShotsPerPeriod1, TeamFarmStat.ShotsPerPeriod2, TeamFarmStat.ShotsPerPeriod3, TeamFarmStat.ShotsPerPeriod4, TeamFarmStat.GoalsPerPeriod1, TeamFarmStat.GoalsPerPeriod2, TeamFarmStat.GoalsPerPeriod3, TeamFarmStat.GoalsPerPeriod4, TeamFarmStat.PuckTimeInZoneDF, TeamFarmStat.PuckTimeInZoneOF, TeamFarmStat.PuckTimeInZoneNT, TeamFarmStat.PuckTimeControlinZoneDF, TeamFarmStat.PuckTimeControlinZoneOF, TeamFarmStat.PuckTimeControlinZoneNT, TeamFarmStat.Shutouts, TeamFarmStat.TotalGoal, TeamFarmStat.TotalAssist, TeamFarmStat.TotalPoint, TeamFarmStat.Pim, TeamFarmStat.Hits, TeamFarmStat.FaceOffWonDefensifZone, TeamFarmStat.FaceOffTotalDefensifZone, TeamFarmStat.FaceOffWonOffensifZone, TeamFarmStat.FaceOffTotalOffensifZone, TeamFarmStat.FaceOffWonNeutralZone, TeamFarmStat.FaceOffTotalNeutralZone, TeamFarmStat.EmptyNetGoal FROM TeamFarmStat WHERE Number = " . $Team . ") AS MainTable ORDER BY CASE WHEN Number > 100 THEN 2 ELSE 1 END, MainTable.Name";
-		$TeamStatSub = $db->query($Query);		
-		$Query = "SELECT * FROM PlayerInfo WHERE Team = " . $Team . " AND Status1 <= 1 Order By PosD, Overall DESC";
-		$PlayerRoster = $db->query($Query);
+		$TeamStatSub = $db->query($Query);
 		$Query = "SELECT MainTable.* FROM (SELECT PlayerInfo.Number, PlayerInfo.Name, PlayerInfo.Team, PlayerInfo.TeamName, PlayerInfo.ProTeamName, PlayerInfo.TeamThemeID, PlayerInfo.Age, PlayerInfo.AgeDate, PlayerInfo.Country, PlayerInfo.Weight, PlayerInfo.Height, PlayerInfo.Contract, PlayerInfo.Rookie, PlayerInfo.NoTrade, PlayerInfo.CanPlayPro, PlayerInfo.CanPlayFarm, PlayerInfo.ForceWaiver, PlayerInfo.WaiverPossible, PlayerInfo.ExcludeSalaryCap, PlayerInfo.ProSalaryinFarm, PlayerInfo.SalaryAverage, PlayerInfo.Salary1, PlayerInfo.Salary2, PlayerInfo.Salary3, PlayerInfo.Salary4, PlayerInfo.Salary5, PlayerInfo.Salary6, PlayerInfo.Salary7, PlayerInfo.Salary8, PlayerInfo.Salary9, PlayerInfo.Salary10, PlayerInfo.SalaryCap1, PlayerInfo.SalaryCap2, PlayerInfo.SalaryCap3, PlayerInfo.SalaryCap4, PlayerInfo.SalaryCap5, PlayerInfo.SalaryCap6, PlayerInfo.SalaryCap7, PlayerInfo.SalaryCap8, PlayerInfo.SalaryCap9, PlayerInfo.SalaryCap10, PlayerInfo.NoTrade1, PlayerInfo.NoTrade2, PlayerInfo.NoTrade3, PlayerInfo.NoTrade4, PlayerInfo.NoTrade5, PlayerInfo.NoTrade6, PlayerInfo.NoTrade7, PlayerInfo.NoTrade8, PlayerInfo.NoTrade9, PlayerInfo.NoTrade10, PlayerInfo.SalaryRemaining, PlayerInfo.SalaryCap, PlayerInfo.SalaryCapRemaining, PlayerInfo.Condition, PlayerInfo.ConditionDecimal,PlayerInfo.Status1, PlayerInfo.URLLink, PlayerInfo.NHLID, PlayerInfo.AvailableForTrade, PlayerInfo.PosC, PlayerInfo.PosLW, PlayerInfo.PosRW, PlayerInfo.PosD, 'False' AS PosG, PlayerInfo.AcquiredType as AcquiredType, PlayerInfo.LastTradeDate as LastTradeDate, PlayerInfo.ContractSignatureDate As ContractSignatureDate, PlayerInfo.ForceUFA As ForceUFA, PlayerInfo.EmergencyRecall As EmergencyRecall, PlayerInfo.Retire as Retire FROM PlayerInfo Where Team =" . $Team . " AND Status1<= 1 UNION ALL SELECT GoalerInfo.Number, GoalerInfo.Name, GoalerInfo.Team, GoalerInfo.TeamName, GoalerInfo.ProTeamName, GoalerInfo.TeamThemeID, GoalerInfo.Age, GoalerInfo.AgeDate, GoalerInfo.Country, GoalerInfo.Weight, GoalerInfo.Height, GoalerInfo.Contract, GoalerInfo.Rookie, GoalerInfo.NoTrade, GoalerInfo.CanPlayPro, GoalerInfo.CanPlayFarm, GoalerInfo.ForceWaiver, GoalerInfo.WaiverPossible, GoalerInfo.ExcludeSalaryCap, GoalerInfo.ProSalaryinFarm, GoalerInfo.SalaryAverage, GoalerInfo.Salary1, GoalerInfo.Salary2, GoalerInfo.Salary3, GoalerInfo.Salary4, GoalerInfo.Salary5, GoalerInfo.Salary6, GoalerInfo.Salary7, GoalerInfo.Salary8, GoalerInfo.Salary9, GoalerInfo.Salary10, GoalerInfo.SalaryCap1, GoalerInfo.SalaryCap2, GoalerInfo.SalaryCap3, GoalerInfo.SalaryCap4, GoalerInfo.SalaryCap5, GoalerInfo.SalaryCap6, GoalerInfo.SalaryCap7, GoalerInfo.SalaryCap8, GoalerInfo.SalaryCap9, GoalerInfo.SalaryCap10, GoalerInfo.NoTrade1, GoalerInfo.NoTrade2, GoalerInfo.NoTrade3, GoalerInfo.NoTrade4, GoalerInfo.NoTrade5, GoalerInfo.NoTrade6, GoalerInfo.NoTrade7, GoalerInfo.NoTrade8, GoalerInfo.NoTrade9, GoalerInfo.NoTrade10, GoalerInfo.SalaryRemaining, GoalerInfo.SalaryCap, GoalerInfo.SalaryCapRemaining, GoalerInfo.Condition, GoalerInfo.ConditionDecimal, GoalerInfo.Status1, GoalerInfo.URLLink, GoalerInfo.NHLID, GoalerInfo.AvailableForTrade,'False' AS PosC, 'False' AS PosLW, 'False' AS PosRW, 'False' AS PosD, 'True' AS PosG, GoalerInfo.AcquiredType as AcquiredType, GoalerInfo.LastTradeDate as LastTradeDate, GoalerInfo.ContractSignatureDate As ContractSignatureDate, GoalerInfo.ForceUFA As ForceUFA, GoalerInfo.EmergencyRecall As EmergencyRecall, GoalerInfo.Retire as Retire FROM GoalerInfo Where Team =" . $Team . "  AND Status1 <= 1) AS MainTable ORDER BY MainTable.Name";
 		$PlayerInfo = $db->query($Query);
 		$Query = "SELECT Count(MainTable.Name) AS CountOfName, Avg(MainTable.Age) AS AvgOfAge, Avg(MainTable.Weight) AS AvgOfWeight, Avg(MainTable.Height) AS AvgOfHeight, Avg(MainTable.Contract) AS AvgOfContract, Avg(MainTable.Salary1) AS AvgOfSalary1 FROM (SELECT PlayerInfo.Name, PlayerInfo.Team, PlayerInfo.Age, PlayerInfo.Weight, PlayerInfo.Height, PlayerInfo.Contract, PlayerInfo.Salary1, PlayerInfo.Status1 FROM PlayerInfo WHERE Team = " . $Team . " and Status1 <= 1 UNION ALL SELECT GoalerInfo.Name, GoalerInfo.Team, GoalerInfo.Age, GoalerInfo.Weight, GoalerInfo.Height, GoalerInfo.Contract, GoalerInfo.Salary1, GoalerInfo.Status1 FROM GoalerInfo WHERE Team= " . $Team . "  AND Status1 <= 1) AS MainTable";
@@ -70,8 +77,6 @@ If ($Team == 0 OR $Team > 100){
 		$GoalieStat = $db->query($Query);
 		$Query = "SELECT Sum(GoalerFarmStat.GP) AS SumOfGP, Sum(GoalerFarmStat.SecondPlay) AS SumOfSecondPlay, Sum(GoalerFarmStat.W) AS SumOfW, Sum(GoalerFarmStat.L) AS SumOfL, Sum(GoalerFarmStat.OTL) AS SumOfOTL, Sum(GoalerFarmStat.Shootout) AS SumOfShootout, Sum(GoalerFarmStat.GA) AS SumOfGA, Sum(GoalerFarmStat.SA) AS SumOfSA, Sum(GoalerFarmStat.SARebound) AS SumOfSARebound, Sum(GoalerFarmStat.Pim) AS SumOfPim, Sum(GoalerFarmStat.A) AS SumOfA, Sum(GoalerFarmStat.PenalityShotsShots) AS SumOfPenalityShotsShots, Sum(GoalerFarmStat.PenalityShotsGoals) AS SumOfPenalityShotsGoals, Sum(GoalerFarmStat.StartGoaler) AS SumOfStartGoaler, Sum(GoalerFarmStat.BackupGoaler) AS SumOfBackupGoaler, Sum(GoalerFarmStat.EmptyNetGoal) AS SumOfEmptyNetGoal, Sum(GoalerFarmStat.Star1) AS SumOfStar1, Sum(GoalerFarmStat.Star2) AS SumOfStar2, Sum(GoalerFarmStat.Star3) AS SumOfStar3, ROUND((CAST(Sum(GoalerFarmStat.GA) AS REAL) / (Sum(GoalerFarmStat.SecondPlay) / 60))*60,3) AS SumOfGAA, ROUND((CAST(Sum(GoalerFarmStat.SA) - Sum(GoalerFarmStat.GA) AS REAL) / (Sum(GoalerFarmStat.SA))),3) AS SumOfPCT, ROUND((CAST(Sum(GoalerFarmStat.PenalityShotsShots) - Sum(GoalerFarmStat.PenalityShotsGoals) AS REAL) / (Sum(GoalerFarmStat.PenalityShotsShots))),3) AS SumOfPenalityShotsPCT FROM GoalerInfo INNER JOIN GoalerFarmStat ON GoalerInfo.Number = GoalerFarmStat.Number WHERE (((GoalerInfo.Team)=" . $Team . ")  AND (GoalerFarmStat.SecondPlay>0)) ORDER BY GoalerFarmStat.W DESC";
 		$GoalieStatTeam = $db->querySingle($Query,true);			
-		$Query = "SELECT * FROM GoalerInfo WHERE Team = " . $Team . " AND Status1 <= 1 Order By Overall DESC";
-		$GoalieRoster = $db->query($Query);
 		$Query = "SELECT * FROM ScheduleFarm WHERE (VisitorTeam = " . $Team . " OR HomeTeam = " . $Team . ") ORDER BY GameNumber";
 		$Schedule= $db->query($Query);
 		$Query = "SELECT * FROM ScheduleFarm WHERE (VisitorTeam = " . $Team . " OR HomeTeam = " . $Team . ") AND Play = 'False' ORDER BY GameNumber LIMIT 1";
@@ -147,7 +152,6 @@ If ($Team == 0 OR $Team > 100){
 				If (isset($PerformanceMonitorStart)){echo "<script>console.log(\"STHS CareerStat TeamCareerGoaliesSeasonTop5 Page PHP Performance : " . (microtime(true)-$PerformanceMonitorStart) . "\"); </script>\n";}
 				$TeamCareerGoaliesPlayoffTop5 = APIPost($LeagueOutputOption['WebsiteURL'],array('GoalerStatFarmHistoryAllSeasonMerge' => '', 'Team' => $TeamInfo['UniqueID'], 'Max' => '5', 'Playoff' => '' ));	
 				If (isset($PerformanceMonitorStart)){echo "<script>console.log(\"STHS CareerStat TeamCareerGoaliesPlayoffTop Page PHP Performance : " . (microtime(true)-$PerformanceMonitorStart) . "\"); </script>\n";}			
-				
 			}else{
 				$PlayoffAppearances = Null;
 				$CupWinner = Null;
@@ -176,6 +180,91 @@ If ($Team == 0 OR $Team > 100){
 	}else{
 		Goto STHSErrorFarmTeam;
 	}
+}elseif($Year > 0 AND file_exists($CareerStatDatabaseFile) == true){
+	$CareerStatdb = new SQLite3($CareerStatDatabaseFile);
+	$Query = "SELECT count(*) AS count FROM TeamFarmInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Number = " . $Team;
+	$Result = $CareerStatdb->querySingle($Query,true);
+	If (isset($PerformanceMonitorStart)){echo "<script>console.log(\"STHS Start Page PHP Performance : " . (microtime(true)-$PerformanceMonitorStart) . "\"); </script>";}		
+	If ($Result['count'] == 1){					
+		$Query = "Select PlayersMugShotBaseURL, PlayersMugShotFileExtension, OutputSalariesRemaining, InchInsteadofCM, LBSInsteadofKG, ScheduleUseDateInsteadofDay, ScheduleRealDate, ShowWebClientInDymanicWebsite,JerseyNumberInWebsite,MergeRosterPlayerInfo,MergeProFarmRoster, SeparateCareerStatFromTeamPage, FarmMinimumGamePlayerLeader,WebsiteURL from LeagueOutputOption";
+		$LeagueOutputOption = $db->querySingle($Query,true);	
+		
+		$Query = "SELECT * FROM TeamFarmInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Number = " . $Team;
+		$TeamInfo = $CareerStatdb->querySingle($Query,true);
+		$Query = "SELECT Name, GMName FROM TeamProInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Number = " . $Team;
+		$TeamProInfo = $CareerStatdb->querySingle($Query,true);		
+		$Query = "SELECT * FROM TeamFarmFinanceHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Number = " . $Team;
+		$TeamFinance = $CareerStatdb->querySingle($Query,true);
+		$Query = "SELECT * FROM TeamFarmStatHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Number = " . $Team;
+		$TeamStat = $CareerStatdb->querySingle($Query,true);
+		$Query = "SELECT MainTable.* FROM (SELECT TeamFarmStatVSHistory.TeamVSName AS Name, TeamFarmStatVSHistory.TeamVSNumber AS Number, '0' as TeamThemeID, TeamFarmStatVSHistory.GP, TeamFarmStatVSHistory.W, TeamFarmStatVSHistory.L, TeamFarmStatVSHistory.T, TeamFarmStatVSHistory.OTW, TeamFarmStatVSHistory.OTL, TeamFarmStatVSHistory.SOW, TeamFarmStatVSHistory.SOL, TeamFarmStatVSHistory.Points, TeamFarmStatVSHistory.GF, TeamFarmStatVSHistory.GA, TeamFarmStatVSHistory.HomeGP, TeamFarmStatVSHistory.HomeW, TeamFarmStatVSHistory.HomeL, TeamFarmStatVSHistory.HomeT, TeamFarmStatVSHistory.HomeOTW, TeamFarmStatVSHistory.HomeOTL, TeamFarmStatVSHistory.HomeSOW, TeamFarmStatVSHistory.HomeSOL, TeamFarmStatVSHistory.HomeGF, TeamFarmStatVSHistory.HomeGA, TeamFarmStatVSHistory.PPAttemp, TeamFarmStatVSHistory.PPGoal, TeamFarmStatVSHistory.PKAttemp, TeamFarmStatVSHistory.PKGoalGA, TeamFarmStatVSHistory.PKGoalGF, TeamFarmStatVSHistory.ShotsFor, TeamFarmStatVSHistory.ShotsAga, TeamFarmStatVSHistory.ShotsBlock, TeamFarmStatVSHistory.ShotsPerPeriod1, TeamFarmStatVSHistory.ShotsPerPeriod2, TeamFarmStatVSHistory.ShotsPerPeriod3, TeamFarmStatVSHistory.ShotsPerPeriod4, TeamFarmStatVSHistory.GoalsPerPeriod1, TeamFarmStatVSHistory.GoalsPerPeriod2, TeamFarmStatVSHistory.GoalsPerPeriod3, TeamFarmStatVSHistory.GoalsPerPeriod4, TeamFarmStatVSHistory.PuckTimeInZoneDF, TeamFarmStatVSHistory.PuckTimeInZoneOF, TeamFarmStatVSHistory.PuckTimeInZoneNT, TeamFarmStatVSHistory.PuckTimeControlinZoneDF, TeamFarmStatVSHistory.PuckTimeControlinZoneOF, TeamFarmStatVSHistory.PuckTimeControlinZoneNT, TeamFarmStatVSHistory.Shutouts, TeamFarmStatVSHistory.TotalGoal, TeamFarmStatVSHistory.TotalAssist, TeamFarmStatVSHistory.TotalPoint, TeamFarmStatVSHistory.Pim, TeamFarmStatVSHistory.Hits, TeamFarmStatVSHistory.FaceOffWonDefensifZone, TeamFarmStatVSHistory.FaceOffTotalDefensifZone, TeamFarmStatVSHistory.FaceOffWonOffensifZone, TeamFarmStatVSHistory.FaceOffTotalOffensifZone, TeamFarmStatVSHistory.FaceOffWonNeutralZone, TeamFarmStatVSHistory.FaceOffTotalNeutralZone, TeamFarmStatVSHistory.EmptyNetGoal FROM TeamFarmStatVSHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND GP > 0 AND TeamNumber = " . $Team . " UNION ALL SELECT 'Total' as Name, '104' as Number, '0' as TeamThemeID, TeamFarmStatHistory.GP, TeamFarmStatHistory.W, TeamFarmStatHistory.L, TeamFarmStatHistory.T, TeamFarmStatHistory.OTW, TeamFarmStatHistory.OTL, TeamFarmStatHistory.SOW, TeamFarmStatHistory.SOL, TeamFarmStatHistory.Points, TeamFarmStatHistory.GF, TeamFarmStatHistory.GA, TeamFarmStatHistory.HomeGP, TeamFarmStatHistory.HomeW, TeamFarmStatHistory.HomeL, TeamFarmStatHistory.HomeT, TeamFarmStatHistory.HomeOTW, TeamFarmStatHistory.HomeOTL, TeamFarmStatHistory.HomeSOW, TeamFarmStatHistory.HomeSOL, TeamFarmStatHistory.HomeGF, TeamFarmStatHistory.HomeGA,  TeamFarmStatHistory.PPAttemp, TeamFarmStatHistory.PPGoal, TeamFarmStatHistory.PKAttemp, TeamFarmStatHistory.PKGoalGA, TeamFarmStatHistory.PKGoalGF, TeamFarmStatHistory.ShotsFor, TeamFarmStatHistory.ShotsAga, TeamFarmStatHistory.ShotsBlock, TeamFarmStatHistory.ShotsPerPeriod1, TeamFarmStatHistory.ShotsPerPeriod2, TeamFarmStatHistory.ShotsPerPeriod3, TeamFarmStatHistory.ShotsPerPeriod4, TeamFarmStatHistory.GoalsPerPeriod1, TeamFarmStatHistory.GoalsPerPeriod2, TeamFarmStatHistory.GoalsPerPeriod3, TeamFarmStatHistory.GoalsPerPeriod4, TeamFarmStatHistory.PuckTimeInZoneDF, TeamFarmStatHistory.PuckTimeInZoneOF, TeamFarmStatHistory.PuckTimeInZoneNT, TeamFarmStatHistory.PuckTimeControlinZoneDF, TeamFarmStatHistory.PuckTimeControlinZoneOF, TeamFarmStatHistory.PuckTimeControlinZoneNT, TeamFarmStatHistory.Shutouts, TeamFarmStatHistory.TotalGoal, TeamFarmStatHistory.TotalAssist, TeamFarmStatHistory.TotalPoint, TeamFarmStatHistory.Pim, TeamFarmStatHistory.Hits, TeamFarmStatHistory.FaceOffWonDefensifZone, TeamFarmStatHistory.FaceOffTotalDefensifZone, TeamFarmStatHistory.FaceOffWonOffensifZone, TeamFarmStatHistory.FaceOffTotalOffensifZone, TeamFarmStatHistory.FaceOffWonNeutralZone, TeamFarmStatHistory.FaceOffTotalNeutralZone, TeamFarmStatHistory.EmptyNetGoal FROM TeamFarmStatHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Number = " . $Team . ") AS MainTable ORDER BY CASE WHEN Number > 100 THEN 2 ELSE 1 END, MainTable.Name";
+		$TeamStatSub = $CareerStatdb->query($Query);
+		$Query = "SELECT * FROM PlayerInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Team = " . $Team . " AND Status1 <= 1 Order By PosD, Overall DESC";
+		$PlayerRoster = $CareerStatdb->query($Query);
+		$Query = "SELECT * FROM GoalerInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Team = " . $Team . " AND Status1 <= 1 Order By Overall DESC";
+		$GoalieRoster = $CareerStatdb->query($Query);				
+		$Query = "SELECT MainTable.* FROM (SELECT PlayerInfoHistory.Number, PlayerInfoHistory.Name, PlayerInfoHistory.Team, PlayerInfoHistory.TeamName, PlayerInfoHistory.ProTeamName, '0'as TeamThemeID, PlayerInfoHistory.Age, PlayerInfoHistory.AgeDate, PlayerInfoHistory.Country, PlayerInfoHistory.Weight, PlayerInfoHistory.Height, PlayerInfoHistory.Contract, PlayerInfoHistory.Rookie, PlayerInfoHistory.NoTrade, PlayerInfoHistory.CanPlayPro, PlayerInfoHistory.CanPlayFarm, PlayerInfoHistory.ForceWaiver, PlayerInfoHistory.WaiverPossible, PlayerInfoHistory.ExcludeSalaryCap, PlayerInfoHistory.ProSalaryinFarm, PlayerInfoHistory.SalaryAverage, PlayerInfoHistory.Salary1, PlayerInfoHistory.Salary2, PlayerInfoHistory.Salary3, PlayerInfoHistory.Salary4, PlayerInfoHistory.Salary5, PlayerInfoHistory.Salary6, PlayerInfoHistory.Salary7, PlayerInfoHistory.Salary8, PlayerInfoHistory.Salary9, PlayerInfoHistory.Salary10, PlayerInfoHistory.SalaryRemaining, PlayerInfoHistory.SalaryCap, PlayerInfoHistory.SalaryCapRemaining, PlayerInfoHistory.Condition, PlayerInfoHistory.ConditionDecimal,PlayerInfoHistory.Status1, PlayerInfoHistory.URLLink, PlayerInfoHistory.NHLID, PlayerInfoHistory.AvailableForTrade, PlayerInfoHistory.PosC, PlayerInfoHistory.PosLW, PlayerInfoHistory.PosRW, PlayerInfoHistory.PosD, 'False' AS PosG, PlayerInfoHistory.Retire as Retire FROM PlayerInfoHistory Where Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Team =" . $Team . " AND Status1 <= 1 UNION ALL SELECT GoalerInfoHistory.Number, GoalerInfoHistory.Name, GoalerInfoHistory.Team, GoalerInfoHistory.TeamName, GoalerInfoHistory.ProTeamName, '0'as TeamThemeID, GoalerInfoHistory.Age, GoalerInfoHistory.AgeDate, GoalerInfoHistory.Country, GoalerInfoHistory.Weight, GoalerInfoHistory.Height, GoalerInfoHistory.Contract, GoalerInfoHistory.Rookie, GoalerInfoHistory.NoTrade, GoalerInfoHistory.CanPlayPro, GoalerInfoHistory.CanPlayFarm, GoalerInfoHistory.ForceWaiver, GoalerInfoHistory.WaiverPossible, GoalerInfoHistory.ExcludeSalaryCap, GoalerInfoHistory.ProSalaryinFarm, GoalerInfoHistory.SalaryAverage, GoalerInfoHistory.Salary1, GoalerInfoHistory.Salary2, GoalerInfoHistory.Salary3, GoalerInfoHistory.Salary4, GoalerInfoHistory.Salary5, GoalerInfoHistory.Salary6, GoalerInfoHistory.Salary7, GoalerInfoHistory.Salary8, GoalerInfoHistory.Salary9, GoalerInfoHistory.Salary10, GoalerInfoHistory.SalaryRemaining, GoalerInfoHistory.SalaryCap, GoalerInfoHistory.SalaryCapRemaining, GoalerInfoHistory.Condition, GoalerInfoHistory.ConditionDecimal, GoalerInfoHistory.Status1, GoalerInfoHistory.URLLink, GoalerInfoHistory.NHLID, GoalerInfoHistory.AvailableForTrade,'False' AS PosC, 'False' AS PosLW, 'False' AS PosRW, 'False' AS PosD, 'True' AS PosG,  GoalerInfoHistory.Retire as Retire FROM GoalerInfoHistory Where Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND  Team =" . $Team . "  AND Status1 <= 1) AS MainTable ORDER BY MainTable.Name";		
+		$PlayerInfo = $CareerStatdb->query($Query);						
+		$Query = "SELECT Avg(PlayerInfoHistory.ConditionDecimal) AS AvgOfConditionDecimal, Avg(PlayerInfoHistory.CK) AS AvgOfCK, Avg(PlayerInfoHistory.FG) AS AvgOfFG, Avg(PlayerInfoHistory.DI) AS AvgOfDI, Avg(PlayerInfoHistory.SK) AS AvgOfSK, Avg(PlayerInfoHistory.ST) AS AvgOfST, Avg(PlayerInfoHistory.EN) AS AvgOfEN, Avg(PlayerInfoHistory.DU) AS AvgOfDU, Avg(PlayerInfoHistory.PH) AS AvgOfPH, Avg(PlayerInfoHistory.FO) AS AvgOfFO, Avg(PlayerInfoHistory.PA) AS AvgOfPA, Avg(PlayerInfoHistory.SC) AS AvgOfSC, Avg(PlayerInfoHistory.DF) AS AvgOfDF, Avg(PlayerInfoHistory.PS) AS AvgOfPS, Avg(PlayerInfoHistory.EX) AS AvgOfEX, Avg(PlayerInfoHistory.LD) AS AvgOfLD, Avg(PlayerInfoHistory.PO) AS AvgOfPO, Avg(PlayerInfoHistory.MO) AS AvgOfMO, Avg(PlayerInfoHistory.Overall) AS AvgOfOverall FROM PlayerInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Team = " . $Team . " AND Status1 <= 1";
+		$PlayerRosterAverage = $CareerStatdb->querySingle($Query,true);	
+		$Query = "SELECT GoalerInfoHistory.Team, GoalerInfoHistory.Status1, Avg(GoalerInfoHistory.ConditionDecimal) AS AvgOfConditionDecimal, Avg(GoalerInfoHistory.SK) AS AvgOfSK, Avg(GoalerInfoHistory.DU) AS AvgOfDU, Avg(GoalerInfoHistory.EN) AS AvgOfEN, Avg(GoalerInfoHistory.SZ) AS AvgOfSZ, Avg(GoalerInfoHistory.AG) AS AvgOfAG, Avg(GoalerInfoHistory.RB) AS AvgOfRB, Avg(GoalerInfoHistory.SC) AS AvgOfSC, Avg(GoalerInfoHistory.HS) AS AvgOfHS, Avg(GoalerInfoHistory.RT) AS AvgOfRT, Avg(GoalerInfoHistory.PH) AS AvgOfPH, Avg(GoalerInfoHistory.PS) AS AvgOfPS, Avg(GoalerInfoHistory.EX) AS AvgOfEX, Avg(GoalerInfoHistory.LD) AS AvgOfLD, Avg(GoalerInfoHistory.PO) AS AvgOfPO, Avg(GoalerInfoHistory.MO) AS AvgOfMO, Avg(GoalerInfoHistory.Overall) AS AvgOfOverall FROM GoalerInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Team = " . $Team . " AND Status1 <= 1";
+		$GoalieRosterAverage = $CareerStatdb->querySingle($Query,true);	
+		$Query = "SELECT Count(MainTable.Name) AS CountOfName, Avg(MainTable.Age) AS AvgOfAge, Avg(MainTable.Weight) AS AvgOfWeight, Avg(MainTable.Height) AS AvgOfHeight, Avg(MainTable.Contract) AS AvgOfContract, Avg(MainTable.Salary1) AS AvgOfSalary1 FROM (SELECT PlayerInfoHistory.Name, PlayerInfoHistory.Team, PlayerInfoHistory.Age, PlayerInfoHistory.Weight, PlayerInfoHistory.Height, PlayerInfoHistory.Contract, PlayerInfoHistory.Salary1, PlayerInfoHistory.Status1 FROM PlayerInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Team = " . $Team . " and Status1 <= 1 UNION ALL SELECT GoalerInfoHistory.Name, GoalerInfoHistory.Team, GoalerInfoHistory.Age, GoalerInfoHistory.Weight, GoalerInfoHistory.Height, GoalerInfoHistory.Contract, GoalerInfoHistory.Salary1, GoalerInfoHistory.Status1 FROM GoalerInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Team= " . $Team . "  AND Status1 <= 1) AS MainTable";
+		$PlayerInfoAverage = $CareerStatdb->querySingle($Query,true);
+		$Query = "SELECT Count(MainTable.Name) AS CountOfName, Avg(MainTable.Age) AS AvgOfAge, Avg(MainTable.Weight) AS AvgOfWeight, Avg(MainTable.Height) AS AvgOfHeight, Avg(MainTable.Contract) AS AvgOfContract, Avg(MainTable.Salary1) AS AvgOfSalary1, Sum(MainTable.Salary1) AS SumOfSalary1, Sum(MainTable.Salary2) AS SumOfSalary2, Sum(MainTable.Salary3) AS SumOfSalary3, Sum(MainTable.Salary4) AS SumOfSalary4, Sum(MainTable.Salary5) AS SumOfSalary5 FROM (SELECT PlayerInfoHistory.Name, PlayerInfoHistory.Team, PlayerInfoHistory.Age, PlayerInfoHistory.Weight, PlayerInfoHistory.Height, PlayerInfoHistory.Contract, PlayerInfoHistory.Salary1, PlayerInfoHistory.Salary2, PlayerInfoHistory.Salary3, PlayerInfoHistory.Salary4, PlayerInfoHistory.Salary5, PlayerInfoHistory.Status1 FROM PlayerInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Team = " . $Team . " UNION ALL SELECT GoalerInfoHistory.Name, GoalerInfoHistory.Team, GoalerInfoHistory.Age, GoalerInfoHistory.Weight, GoalerInfoHistory.Height, GoalerInfoHistory.Contract, GoalerInfoHistory.Salary1, GoalerInfoHistory.Salary2, GoalerInfoHistory.Salary3, GoalerInfoHistory.Salary4, GoalerInfoHistory.Salary5, GoalerInfoHistory.Status1 FROM GoalerInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Team= " . $Team . "  AND Status1 <= 1) AS MainTable";
+		$PlayerInfoTotalAverage = $CareerStatdb->querySingle($Query,true);		
+		$Query = "SELECT PlayerFarmStatHistory.*, PlayerInfoHistory.TeamName, PlayerInfoHistory.PosC, PlayerInfoHistory.PosLW, PlayerInfoHistory.PosRW, PlayerInfoHistory.PosD, '0' As TeamThemeID, ROUND((CAST(PlayerFarmStatHistory.G AS REAL) / (PlayerFarmStatHistory.Shots))*100,2) AS ShotsPCT, ROUND((CAST(PlayerFarmStatHistory.SecondPlay AS REAL) / 60 / (PlayerFarmStatHistory.GP)),2) AS AMG,ROUND((CAST(PlayerFarmStatHistory.FaceOffWon AS REAL) / (PlayerFarmStatHistory.FaceOffTotal))*100,2) as FaceoffPCT,ROUND((CAST(PlayerFarmStatHistory.P AS REAL) / (PlayerFarmStatHistory.SecondPlay) * 60 * 20),2) AS P20 FROM PlayerInfoHistory INNER JOIN PlayerFarmStatHistory ON PlayerInfoHistory.Number = PlayerFarmStatHistory.Number WHERE ((PlayerInfoHistory.Year = " . $Year . ") AND (PlayerInfoHistory.Playoff = '" . $PlayoffString. "') AND	(PlayerFarmStatHistory.Year = " . $Year . ") AND (PlayerFarmStatHistory.Playoff = '" . $PlayoffString. "') AND (PlayerInfoHistory.Team=" . $Team . ") AND (PlayerFarmStatHistory.SecondPlay>0)) ORDER BY PlayerFarmStatHistory.P DESC";
+		$PlayerStat = $CareerStatdb->query($Query);
+		$Query = "SELECT Sum(PlayerFarmStatHistory.GP) AS SumOfGP, Sum(PlayerFarmStatHistory.Shots) AS SumOfShots, Sum(PlayerFarmStatHistory.G) AS SumOfG, Sum(PlayerFarmStatHistory.A) AS SumOfA, Sum(PlayerFarmStatHistory.P) AS SumOfP, Sum(PlayerFarmStatHistory.PlusMinus) AS SumOfPlusMinus, Sum(PlayerFarmStatHistory.Pim) AS SumOfPim, Sum(PlayerFarmStatHistory.Pim5) AS SumOfPim5, Sum(PlayerFarmStatHistory.ShotsBlock) AS SumOfShotsBlock, Sum(PlayerFarmStatHistory.OwnShotsBlock) AS SumOfOwnShotsBlock, Sum(PlayerFarmStatHistory.OwnShotsMissGoal) AS SumOfOwnShotsMissGoal, Sum(PlayerFarmStatHistory.Hits) AS SumOfHits, Sum(PlayerFarmStatHistory.HitsTook) AS SumOfHitsTook, Sum(PlayerFarmStatHistory.GW) AS SumOfGW, Sum(PlayerFarmStatHistory.GT) AS SumOfGT, Sum(PlayerFarmStatHistory.FaceOffWon) AS SumOfFaceOffWon, Sum(PlayerFarmStatHistory.FaceOffTotal) AS SumOfFaceOffTotal, Sum(PlayerFarmStatHistory.PenalityShotsScore) AS SumOfPenalityShotsScore, Sum(PlayerFarmStatHistory.PenalityShotsTotal) AS SumOfPenalityShotsTotal, Sum(PlayerFarmStatHistory.EmptyNetGoal) AS SumOfEmptyNetGoal, Sum(PlayerFarmStatHistory.SecondPlay) AS SumOfSecondPlay, Sum(PlayerFarmStatHistory.HatTrick) AS SumOfHatTrick, Sum(PlayerFarmStatHistory.PPG) AS SumOfPPG, Sum(PlayerFarmStatHistory.PPA) AS SumOfPPA, Sum(PlayerFarmStatHistory.PPP) AS SumOfPPP, Sum(PlayerFarmStatHistory.PPShots) AS SumOfPPShots, Sum(PlayerFarmStatHistory.PPSecondPlay) AS SumOfPPSecondPlay, Sum(PlayerFarmStatHistory.PKG) AS SumOfPKG, Sum(PlayerFarmStatHistory.PKA) AS SumOfPKA, Sum(PlayerFarmStatHistory.PKP) AS SumOfPKP, Sum(PlayerFarmStatHistory.PKShots) AS SumOfPKShots, Sum(PlayerFarmStatHistory.PKSecondPlay) AS SumOfPKSecondPlay, Sum(PlayerFarmStatHistory.GiveAway) AS SumOfGiveAway, Sum(PlayerFarmStatHistory.TakeAway) AS SumOfTakeAway, Sum(PlayerFarmStatHistory.PuckPossesionTime) AS SumOfPuckPossesionTime, Sum(PlayerFarmStatHistory.FightW) AS SumOfFightW, Sum(PlayerFarmStatHistory.FightL) AS SumOfFightL, Sum(PlayerFarmStatHistory.FightT) AS SumOfFightT, Sum(PlayerFarmStatHistory.Star1) AS SumOfStar1, Sum(PlayerFarmStatHistory.Star2) AS SumOfStar2, Sum(PlayerFarmStatHistory.Star3) AS SumOfStar3, ROUND((CAST(Sum(PlayerFarmStatHistory.G) AS REAL) / (Sum(PlayerFarmStatHistory.Shots)))*100,2) AS SumOfShotsPCT, ROUND((CAST(Sum(PlayerFarmStatHistory.SecondPlay) AS REAL) / 60 / (Sum(PlayerFarmStatHistory.GP))),2) AS SumOfAMG, ROUND((CAST(Sum(PlayerFarmStatHistory.FaceOffWon) AS REAL) / (Sum(PlayerFarmStatHistory.FaceOffTotal)))*100,2) as SumOfFaceoffPCT, ROUND((CAST(Sum(PlayerFarmStatHistory.P) AS REAL) / (Sum(PlayerFarmStatHistory.SecondPlay)) * 60 * 20),2) AS SumOfP20 FROM PlayerInfoHistory INNER JOIN PlayerFarmStatHistory ON PlayerInfoHistory.Number = PlayerFarmStatHistory.Number WHERE ((PlayerInfoHistory.Year = " . $Year . ") AND (PlayerInfoHistory.Playoff = '" . $PlayoffString. "') AND (PlayerFarmStatHistory.Year = " . $Year . ") AND (PlayerFarmStatHistory.Playoff = '" . $PlayoffString. "') AND  (PlayerInfoHistory.Team=" . $Team . ") AND (PlayerFarmStatHistory.SecondPlay>0)) ORDER BY PlayerFarmStatHistory.P DESC";
+		$PlayerStatTeam = $CareerStatdb->querySingle($Query,true);	
+		$Query = "SELECT GoalerFarmStatHistory.*, GoalerInfoHistory.TeamName, '0' As TeamThemeID, ROUND((CAST(GoalerFarmStatHistory.GA AS REAL) / (GoalerFarmStatHistory.SecondPlay / 60))*60,3) AS GAA, ROUND((CAST(GoalerFarmStatHistory.SA - GoalerFarmStatHistory.GA AS REAL) / (GoalerFarmStatHistory.SA)),3) AS PCT, ROUND((CAST(GoalerFarmStatHistory.PenalityShotsShots - GoalerFarmStatHistory.PenalityShotsGoals AS REAL) / (GoalerFarmStatHistory.PenalityShotsShots)),3) AS PenalityShotsPCT FROM GoalerInfoHistory INNER JOIN GoalerFarmStatHistory ON GoalerInfoHistory.Number = GoalerFarmStatHistory.Number WHERE ((GoalerInfoHistory.Year = " . $Year . ") AND (GoalerInfoHistory.Playoff = '" . $PlayoffString. "') AND (GoalerFarmStatHistory.Year = " . $Year . ") AND (GoalerFarmStatHistory.Playoff = '" . $PlayoffString. "') AND (GoalerInfoHistory.Team=" . $Team . ") AND (GoalerFarmStatHistory.SecondPlay>0)) ORDER BY GoalerFarmStatHistory.W DESC";
+		$GoalieStat = $CareerStatdb->query($Query);	
+		$Query = "SELECT Sum(GoalerFarmStatHistory.GP) AS SumOfGP, Sum(GoalerFarmStatHistory.SecondPlay) AS SumOfSecondPlay, Sum(GoalerFarmStatHistory.W) AS SumOfW, Sum(GoalerFarmStatHistory.L) AS SumOfL, Sum(GoalerFarmStatHistory.OTL) AS SumOfOTL, Sum(GoalerFarmStatHistory.Shootout) AS SumOfShootout, Sum(GoalerFarmStatHistory.GA) AS SumOfGA, Sum(GoalerFarmStatHistory.SA) AS SumOfSA, Sum(GoalerFarmStatHistory.SARebound) AS SumOfSARebound, Sum(GoalerFarmStatHistory.Pim) AS SumOfPim, Sum(GoalerFarmStatHistory.A) AS SumOfA, Sum(GoalerFarmStatHistory.PenalityShotsShots) AS SumOfPenalityShotsShots, Sum(GoalerFarmStatHistory.PenalityShotsGoals) AS SumOfPenalityShotsGoals, Sum(GoalerFarmStatHistory.StartGoaler) AS SumOfStartGoaler, Sum(GoalerFarmStatHistory.BackupGoaler) AS SumOfBackupGoaler, Sum(GoalerFarmStatHistory.EmptyNetGoal) AS SumOfEmptyNetGoal, Sum(GoalerFarmStatHistory.Star1) AS SumOfStar1, Sum(GoalerFarmStatHistory.Star2) AS SumOfStar2, Sum(GoalerFarmStatHistory.Star3) AS SumOfStar3, ROUND((CAST(Sum(GoalerFarmStatHistory.GA) AS REAL) / (Sum(GoalerFarmStatHistory.SecondPlay) / 60))*60,3) AS SumOfGAA, ROUND((CAST(Sum(GoalerFarmStatHistory.SA) - Sum(GoalerFarmStatHistory.GA) AS REAL) / (Sum(GoalerFarmStatHistory.SA))),3) AS SumOfPCT, ROUND((CAST(Sum(GoalerFarmStatHistory.PenalityShotsShots) - Sum(GoalerFarmStatHistory.PenalityShotsGoals) AS REAL) / (Sum(GoalerFarmStatHistory.PenalityShotsShots))),3) AS SumOfPenalityShotsPCT FROM GoalerInfoHistory INNER JOIN GoalerFarmStatHistory ON GoalerInfoHistory.Number = GoalerFarmStatHistory.Number WHERE ((GoalerInfoHistory.Year = " . $Year . ") AND (GoalerInfoHistory.Playoff = '" . $PlayoffString. "') AND (GoalerFarmStatHistory.Year = " . $Year . ") AND (GoalerFarmStatHistory.Playoff = '" . $PlayoffString. "') AND (GoalerInfoHistory.Team=" . $Team . ") AND (GoalerFarmStatHistory.SecondPlay>0)) ORDER BY GoalerFarmStatHistory.W DESC";
+		$GoalieStatTeam = $CareerStatdb->querySingle($Query,true);			
+		$Query = "SELECT * FROM ScheduleFarm WHERE (VisitorTeam = " . $Team . " OR HomeTeam = " . $Team . ") AND Year = " . $Year . " And Playoff = '" . $PlayoffString. "' ORDER BY GameNumber";
+		$Schedule= $CareerStatdb->query($Query);
+		$ScheduleNext = Null;		
+		$Query = "SELECT CoachInfo.* FROM CoachInfo INNER JOIN TeamFarmInfoHistory ON CoachInfo.Number = TeamFarmInfoHistory.CoachID WHERE ((TeamFarmInfoHistory.Year = " . $Year . ") AND (TeamFarmInfoHistory.Playoff = '" . $PlayoffString. "') AND (CoachInfo.Year = " . $Year . ") AND (CoachInfo.Playoff = '" . $PlayoffString. "') AND (CoachInfo.Team=" . $Team ."))";
+		$CoachInfo = $CareerStatdb->querySingle($Query,true);	
+		$Query = "SELECT * FROM FarmRivalryInfo WHERE Year = " . $Year . " AND Playoff = '" . $PlayoffString. "' AND Team1 = " . $Team . " ORDER By TEAM2";
+		$RivalryInfo = $CareerStatdb->query($Query);		
+		$Query = "Select Name, LeagueYear, PointSystemW, PointSystemSO, OffSeason, LeagueYearOutput, FarmScheduleTotalDay, ScheduleNextDay, RFAAge, UFAAge, DefaultSimulationPerDay, TradeDeadLine, ProScheduleTotalDay, PreSeasonSchedule, PlayOffStarted from LeagueGeneral WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "'";
+		$LeagueGeneral = $CareerStatdb->querySingle($Query,true);
+		$Query = "Select FarmFinanceEnable from LeagueSimulation WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "'";
+		$LeagueSimulation = $CareerStatdb->querySingle($Query,true);		
+		$Query = "Select RemoveSalaryCapWhenPlayerUnderCondition, SalaryCapOption from LeagueFinance WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "'";
+		$LeagueFinance = $CareerStatdb->querySingle($Query,true);		
+		$LeagueWebClient = Null;	
+		$Query = "SELECT Count(Prospects.Name) As CountOfName FROM Prospects WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND TeamNumber = " . $Team;
+		$ProspectsCount = $CareerStatdb->querySingle($Query,true);			
+		$TeamLines = Null;	
+		$TeamLinesNumberOnly = Null;	
+		$ScheduleLastGame = Null;	
+		$ScheduleNextGame= Null;	
+		$TeamLeader = Null;	
+		$Query = "SELECT PlayerFarmStatHistory.*, PlayerInfoHistory.TeamName, PlayerInfoHistory.Team, PlayerInfoHistory.PosC, PlayerInfoHistory.PosLW, PlayerInfoHistory.PosRW,PlayerInfoHistory.Jersey,PlayerInfoHistory.NHLID, PlayerInfoHistory.PosD, ROUND((CAST(PlayerFarmStatHistory.G AS REAL) / (PlayerFarmStatHistory.Shots))*100,2) AS ShotsPCT, ROUND((CAST(PlayerFarmStatHistory.SecondPlay AS REAL) / 60 / (PlayerFarmStatHistory.GP)),2) AS AMG,ROUND((CAST(PlayerFarmStatHistory.FaceOffWon AS REAL) / (PlayerFarmStatHistory.FaceOffTotal))*100,2) as FaceoffPCT,ROUND((CAST(PlayerFarmStatHistory.P AS REAL) / (PlayerFarmStatHistory.SecondPlay) * 60 * 20),2) AS P20 FROM PlayerInfoHistory INNER JOIN PlayerFarmStatHistory ON PlayerInfoHistory.Number = PlayerFarmStatHistory.Number WHERE ((PlayerInfoHistory.Year = " . $Year . ") AND (PlayerInfoHistory.Playoff = '" . $PlayoffString. "') AND (PlayerInfoHistory.Team=" . $Team . ") AND (PlayerInfoHistory.Status1 <= 1)  AND (PlayerFarmStatHistory.GP>0)) ORDER BY PlayerFarmStatHistory.G DESC, PlayerFarmStatHistory.GP ASC, PlayerFarmStatHistory.P DESC LIMIT 1";
+		$TeamLeaderG = $CareerStatdb->query($Query);
+		$Query = "SELECT PlayerFarmStatHistory.*, PlayerInfoHistory.TeamName, PlayerInfoHistory.Team, PlayerInfoHistory.PosC, PlayerInfoHistory.PosLW, PlayerInfoHistory.PosRW,PlayerInfoHistory.Jersey,PlayerInfoHistory.NHLID, PlayerInfoHistory.PosD, ROUND((CAST(PlayerFarmStatHistory.G AS REAL) / (PlayerFarmStatHistory.Shots))*100,2) AS ShotsPCT, ROUND((CAST(PlayerFarmStatHistory.SecondPlay AS REAL) / 60 / (PlayerFarmStatHistory.GP)),2) AS AMG,ROUND((CAST(PlayerFarmStatHistory.FaceOffWon AS REAL) / (PlayerFarmStatHistory.FaceOffTotal))*100,2) as FaceoffPCT,ROUND((CAST(PlayerFarmStatHistory.P AS REAL) / (PlayerFarmStatHistory.SecondPlay) * 60 * 20),2) AS P20 FROM PlayerInfoHistory INNER JOIN PlayerFarmStatHistory ON PlayerInfoHistory.Number = PlayerFarmStatHistory.Number WHERE ((PlayerInfoHistory.Year = " . $Year . ") AND (PlayerInfoHistory.Playoff = '" . $PlayoffString. "') AND (PlayerInfoHistory.Team=" . $Team . ") AND (PlayerInfoHistory.Status1 <= 1)  AND (PlayerFarmStatHistory.GP>0))  ORDER BY PlayerFarmStatHistory.A DESC, PlayerFarmStatHistory.P DESC, PlayerFarmStatHistory.GP ASC LIMIT 1";
+		$TeamLeaderA = $CareerStatdb->query($Query);
+		$Query = "SELECT PlayerFarmStatHistory.*, PlayerInfoHistory.TeamName, PlayerInfoHistory.Team, PlayerInfoHistory.PosC, PlayerInfoHistory.PosLW, PlayerInfoHistory.PosRW,PlayerInfoHistory.Jersey,PlayerInfoHistory.NHLID, PlayerInfoHistory.PosD, ROUND((CAST(PlayerFarmStatHistory.G AS REAL) / (PlayerFarmStatHistory.Shots))*100,2) AS ShotsPCT, ROUND((CAST(PlayerFarmStatHistory.SecondPlay AS REAL) / 60 / (PlayerFarmStatHistory.GP)),2) AS AMG,ROUND((CAST(PlayerFarmStatHistory.FaceOffWon AS REAL) / (PlayerFarmStatHistory.FaceOffTotal))*100,2) as FaceoffPCT,ROUND((CAST(PlayerFarmStatHistory.P AS REAL) / (PlayerFarmStatHistory.SecondPlay) * 60 * 20),2) AS P20 FROM PlayerInfoHistory INNER JOIN PlayerFarmStatHistory ON PlayerInfoHistory.Number = PlayerFarmStatHistory.Number WHERE ((PlayerInfoHistory.Year = " . $Year . ") AND (PlayerInfoHistory.Playoff = '" . $PlayoffString. "') AND (PlayerInfoHistory.Team=" . $Team . ") AND (PlayerInfoHistory.Status1 <= 1)  AND (PlayerFarmStatHistory.GP>0)) ORDER BY PlayerFarmStatHistory.P DESC, PlayerFarmStatHistory.GP ASC LIMIT 1";
+		$TeamLeaderP = $CareerStatdb->query($Query);
+		$Query = "SELECT PlayerFarmStatHistory.*, PlayerInfoHistory.TeamName, PlayerInfoHistory.Team, PlayerInfoHistory.PosC, PlayerInfoHistory.PosLW, PlayerInfoHistory.PosRW,PlayerInfoHistory.Jersey,PlayerInfoHistory.NHLID, PlayerInfoHistory.PosD, ROUND((CAST(PlayerFarmStatHistory.G AS REAL) / (PlayerFarmStatHistory.Shots))*100,2) AS ShotsPCT, ROUND((CAST(PlayerFarmStatHistory.SecondPlay AS REAL) / 60 / (PlayerFarmStatHistory.GP)),2) AS AMG,ROUND((CAST(PlayerFarmStatHistory.FaceOffWon AS REAL) / (PlayerFarmStatHistory.FaceOffTotal))*100,2) as FaceoffPCT,ROUND((CAST(PlayerFarmStatHistory.P AS REAL) / (PlayerFarmStatHistory.SecondPlay) * 60 * 20),2) AS P20 FROM PlayerInfoHistory INNER JOIN PlayerFarmStatHistory ON PlayerInfoHistory.Number = PlayerFarmStatHistory.Number WHERE ((PlayerInfoHistory.Year = " . $Year . ") AND (PlayerInfoHistory.Playoff = '" . $PlayoffString. "') AND (PlayerInfoHistory.Team=" . $Team . ") AND (PlayerInfoHistory.Status1 <= 1)  AND (PlayerFarmStatHistory.GP>0))  ORDER BY PlayerFarmStatHistory.PlusMinus DESC, PlayerFarmStatHistory.G DESC, PlayerFarmStatHistory.GP ASC LIMIT 1";
+		$TeamLeaderPlusMinus = $CareerStatdb->query($Query);
+		$Query = "SELECT GoalerFarmStatHistory.*, GoalerInfoHistory.TeamName,GoalerInfoHistory.Team,GoalerInfoHistory.Jersey,GoalerInfoHistory.NHLID, ROUND((CAST(GoalerFarmStatHistory.GA AS REAL) / (GoalerFarmStatHistory.SecondPlay / 60))*60,3) AS GAA, ROUND((CAST(GoalerFarmStatHistory.SA - GoalerFarmStatHistory.GA AS REAL) / (GoalerFarmStatHistory.SA)),3) AS PCT, ROUND((CAST(GoalerFarmStatHistory.PenalityShotsShots - GoalerFarmStatHistory.PenalityShotsGoals AS REAL) / (GoalerFarmStatHistory.PenalityShotsShots)),3) AS PenalityShotsPCT FROM GoalerInfoHistory INNER JOIN GoalerFarmStatHistory ON GoalerInfoHistory.Number = GoalerFarmStatHistory.Number WHERE ((GoalerInfoHistory.Year = " . $Year . ") AND (GoalerInfoHistory.Playoff = '" . $PlayoffString. "') AND (GoalerInfoHistory.Team=" . $Team . ") AND (GoalerInfoHistory.Status1 <= 1) AND (GoalerFarmStatHistory.SecondPlay >= 3600)) ORDER BY W DESC, GoalerFarmStatHistory.GP DESC LIMIT 1";
+		$TeamLeaderGAA = $CareerStatdb->query($Query);
+		$Query = "SELECT GoalerFarmStatHistory.*, GoalerInfoHistory.TeamName,GoalerInfoHistory.Team,GoalerInfoHistory.Jersey,GoalerInfoHistory.NHLID, ROUND((CAST(GoalerFarmStatHistory.GA AS REAL) / (GoalerFarmStatHistory.SecondPlay / 60))*60,3) AS GAA, ROUND((CAST(GoalerFarmStatHistory.SA - GoalerFarmStatHistory.GA AS REAL) / (GoalerFarmStatHistory.SA)),3) AS PCT, ROUND((CAST(GoalerFarmStatHistory.PenalityShotsShots - GoalerFarmStatHistory.PenalityShotsGoals AS REAL) / (GoalerFarmStatHistory.PenalityShotsShots)),3) AS PenalityShotsPCT FROM GoalerInfoHistory INNER JOIN GoalerFarmStatHistory ON GoalerInfoHistory.Number = GoalerFarmStatHistory.Number WHERE ((GoalerInfoHistory.Year = " . $Year . ") AND (GoalerInfoHistory.Playoff = '" . $PlayoffString. "') AND (GoalerInfoHistory.Team=" . $Team . ") AND (GoalerInfoHistory.Status1 <= 1)  AND (GoalerFarmStatHistory.SecondPlay >= 3600)) ORDER BY PCT DESC, GoalerFarmStatHistory.GP DESC LIMIT 1";
+		$TeamLeaderSavePCT = $CareerStatdb->query($Query);		
+		
+		$LeagueName = $LeagueGeneral['Name'];
+		$TeamName = $TeamInfo['Name'] . " - " . $TopMenuLang['Year'] . " : " . $Year;	
+		echo "<title>" . $LeagueName . " - " . $TeamName . " - " . $TopMenuLang['Year'] . " : " . $Year . "</title>\n";		
+		
+	}else{
+		Goto STHSErrorFarmTeam;
+	}
+}else{
+	Goto STHSErrorFarmTeam;
+}
 	echo "<link href=\"" . $CSSJSCDNPath . "STHSTeam.css\" rel=\"stylesheet\" type=\"text/css\">\n";
 }} catch (Exception $e) {
 STHSErrorFarmTeam:
@@ -205,8 +294,6 @@ STHSErrorFarmTeam:
 	$Prospects = Null;
 	$TeamDraftPick = Null;
 	$TeamInjurySuspension = Null;
-	$GoalieDepthChart = Null;
-	$PlayerDepthChart = Null;
 	$TeamCareerSeason = Null;
 	$TeamCareerPlayoff = Null;
 	$TeamCareerSumSeasonOnly = Null;
@@ -229,7 +316,11 @@ STHSErrorFarmTeam:
 	$TeamCareerPlayersPlayoffTop5 = Null;
 	$TeamCareerGoaliesSeasonTop5 = Null;
 	$TeamCareerGoaliesPlayoffTop5 = Null;			
-	echo "<title>" . $DatabaseNotFound . "</title>\n";
+	If ($LeagueName == ""){
+		echo "<title>" . $DatabaseNotFound . "</title>\n";
+	}else{
+		echo "<title>" . $LeagueName . "</title>\n";
+	}
 	echo "<style>.STHSPHPTeamStat_Main {display:none;}</style>\n";
 }
 
@@ -311,7 +402,8 @@ If ($TeamInfo <> Null){
 	if ($TeamStat['PPAttemp'] > 0){echo number_Format($TeamStat['PPGoal'] / $TeamStat['PPAttemp'] * 100,2) . "%";} else { echo "0%";}
 	echo " | PK%: ";
 	if ($TeamStat['PKAttemp'] > 0){echo number_Format(($TeamStat['PKAttemp'] - $TeamStat['PKGoalGA']) / $TeamStat['PKAttemp'] * 100,2) . "%";} else {echo "0%";} 
-	echo "<br>" . $TeamLang['GM'] . $TeamProInfo['GMName'] . " | " . $TeamLang['Morale'] . $TeamInfo['Morale'] . " | " . $TeamLang['TeamOverall'] . $TeamInfo['TeamOverall'];
+	echo "<br>" . $TeamLang['GM'] . $TeamProInfo['GMName'] . " | " . $TeamLang['Morale'] . $TeamInfo['Morale'];
+	if ($Year == 0){echo " | " . $TeamLang['TeamOverall'] . $TeamInfo['TeamOverall'];}
 	If ($Team > 0 AND $Team <= 100){
 		$Query = "SELECT count(*) AS count FROM ScheduleFarm WHERE (VisitorTeam = " . $Team . " OR HomeTeam = " . $Team . ") AND Play = 'False' ORDER BY GameNumber LIMIT 1";
 		$Result = $db->querySingle($Query,true);
@@ -333,20 +425,30 @@ If ($TeamInfo <> Null){
 <br>
 <?php 
 echo "<div class=\"tabsmain standard\"><ul class=\"tabmain-links\">";
-echo "<li><a href=\"ProTeam.php?Team=" . $Team . "\">"; if ($TeamProInfo != Null){echo $TeamProInfo['Name'];} echo "</a></li>";
-echo "<li";if($SubMenu ==0){echo " class=\"activemain\"";} echo "><a href=\"#tabmain0\">" . $TeamLang['TeamHome'] . "</a></li>";
-echo "<li";if($SubMenu ==1){echo " class=\"activemain\"";} echo "><a href=\"#tabmain1\">" . $TeamLang['Roster'] . "</a></li>";
-echo "<li";if($SubMenu ==2){echo " class=\"activemain\"";} echo "><a href=\"#tabmain2\">" . $TeamLang['Scoring'] . "</a></li>";
-echo "<li";if($SubMenu ==3){echo " class=\"activemain\"";} echo "><a href=\"#tabmain3\">" . $TeamLang['PlayersInfo'] . "</a></li>";
-echo "<li";if($SubMenu ==4){echo " class=\"activemain\"";} echo "><a href=\"#tabmain4\">" . $TeamLang['Lines'] . "</a></li>";
-echo "<li";if($SubMenu ==5){echo " class=\"activemain\"";} echo "><a href=\"#tabmain5\">" . $TeamLang['TeamStats'] . "</a></li>";
-echo "<li";if($SubMenu ==6){echo " class=\"activemain\"";} echo "><a href=\"#tabmain6\">" . $TeamLang['Schedule'] . "</a></li>";
-If ($LeagueSimulationMenu['FarmFinanceEnable'] == "True"){echo "<li";if($SubMenu ==7){echo " class=\"activemain\"";} echo "><a href=\"#tabmain7\">" . $TeamLang['Finance'] . "</a></li>";}
-if ($TeamCareerStatFound == true){echo "<li";if($SubMenu ==8){echo " class=\"activemain\"";};echo "><a href=\"#tabmain8\">" . $TeamLang['CareerTeamStats'] . "</a></li>\n";}
-if ($LeagueOutputOption != Null){if (file_exists($CareerStatDatabaseFile) == true AND $LeagueOutputOption['SeparateCareerStatFromTeamPage'] == "True"){echo "<li><a href=\"TeamCareerOnly.php?Team=" . $Team . "&Farm\">" . $TeamLang['CareerTeamStats'] . "</a></li>\n";}}
-if ($LeagueOutputOption != Null){if ($LeagueOutputOption['ShowWebClientInDymanicWebsite'] == "True" AND ($DoNotRequiredLoginDynamicWebsite == True or $CookieTeamNumber == $Team)){
-echo "<li><a href=\"WebClientLines.php?League=Farm&TeamID=" . $Team . "\">" . $TeamLang['WebLinesEditor'] . "</a></li>\n";}
-}?>
+If ($Year == 0){
+	echo "<li><a href=\"ProTeam.php?Team=" . $Team . "\">"; if ($TeamProInfo != Null){echo $TeamProInfo['Name'];} echo "</a></li>\n";
+	echo "<li";if($SubMenu ==0){echo " class=\"activemain\"";} echo "><a href=\"#tabmain0\">" . $TeamLang['TeamHome'] . "</a></li>\n";
+	echo "<li";if($SubMenu ==1){echo " class=\"activemain\"";} echo "><a href=\"#tabmain1\">" . $TeamLang['Roster'] . "</a></li>\n";
+	echo "<li";if($SubMenu ==2){echo " class=\"activemain\"";} echo "><a href=\"#tabmain2\">" . $TeamLang['Scoring'] . "</a></li>\n";
+	echo "<li";if($SubMenu ==3){echo " class=\"activemain\"";} echo "><a href=\"#tabmain3\">" . $TeamLang['PlayersInfo'] . "</a></li>\n";
+	echo "<li";if($SubMenu ==4){echo " class=\"activemain\"";} echo "><a href=\"#tabmain4\">" . $TeamLang['Lines'] . "</a></li>\n";
+	echo "<li";if($SubMenu ==5){echo " class=\"activemain\"";} echo "><a href=\"#tabmain5\">" . $TeamLang['TeamStats'] . "</a></li>\n";
+	echo "<li";if($SubMenu ==6){echo " class=\"activemain\"";} echo "><a href=\"#tabmain6\">" . $TeamLang['Schedule'] . "</a></li>\n";
+	If ($LeagueSimulation['FarmFinanceEnable'] == "True"){echo "<li";if($SubMenu ==7){echo " class=\"activemain\"";} echo "><a href=\"#tabmain7\">" . $TeamLang['Finance'] . "</a></li>\n";}
+	if ($TeamCareerStatFound == true){echo "<li";if($SubMenu ==8){echo " class=\"activemain\"";};echo "><a href=\"#tabmain8\">" . $TeamLang['CareerTeamStats'] . "</a></li>\n";}
+	if ($LeagueOutputOption != Null){if (file_exists($CareerStatDatabaseFile) == true AND $LeagueOutputOption['SeparateCareerStatFromTeamPage'] == "True"){echo "<li><a href=\"TeamCareerOnly.php?Team=" . $Team . "&Farm\">" . $TeamLang['CareerTeamStats'] . "</a></li>\n";}}
+	if ($LeagueOutputOption != Null){if ($LeagueOutputOption['ShowWebClientInDymanicWebsite'] == "True" AND ($DoNotRequiredLoginDynamicWebsite == True or $CookieTeamNumber == $Team)){
+	echo "<li><a href=\"WebClientLines.php?League=Farm&TeamID=" . $Team . "\">" . $TeamLang['WebLinesEditor'] . "</a></li>\n";}}
+}else{
+	echo "<li";if($SubMenu ==0){echo " class=\"activemain\"";} echo "><a href=\"#tabmain0\">" . $TeamLang['TeamHome'] . "</a></li>\n";
+	echo "<li";if($SubMenu ==1){echo " class=\"activemain\"";} echo "><a href=\"#tabmain1\">" . $TeamLang['Roster'] . "</a></li>\n";
+	echo "<li";if($SubMenu ==2){echo " class=\"activemain\"";} echo "><a href=\"#tabmain2\">" . $TeamLang['Scoring'] . "</a></li>\n";
+	echo "<li";if($SubMenu ==3){echo " class=\"activemain\"";} echo "><a href=\"#tabmain3\">" . $TeamLang['PlayersInfo'] . "</a></li>\n";
+	echo "<li";if($SubMenu ==5){echo " class=\"activemain\"";} echo "><a href=\"#tabmain5\">" . $TeamLang['TeamStats'] . "</a></li>\n";
+	echo "<li";if($SubMenu ==6){echo " class=\"activemain\"";} echo "><a href=\"#tabmain6\">" . $TeamLang['Schedule'] . "</a></li>\n";
+	If ($LeagueSimulation['FarmFinanceEnable'] == "True"){echo "<li";if($SubMenu ==7){echo " class=\"activemain\"";} echo "><a href=\"#tabmain7\">" . $TeamLang['Finance'] . "</a></li>\n";}
+}
+?>
 </ul>
 <div class="STHSPHPTeam_HomeDiv">
 
@@ -445,19 +547,25 @@ if (empty($ScheduleNextGame) == false){while ($row = $ScheduleNextGame ->fetchAr
 <?php
 $ResultBound = False;
 if (empty($TeamLeaderG) == false){while ($Row = $TeamLeaderG ->fetchArray()) {
-	echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
 	If ($LeagueOutputOption['PlayersMugShotBaseURL'] != "" AND $LeagueOutputOption['PlayersMugShotFileExtension'] != "" AND $Row['NHLID'] != ""){
-	echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\">";}
-	echo "</td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD \"><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['Goals'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"PlayerReport.php?Player=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['G'] . "</span></td>\n";
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
+		echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\"></td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" >";
+	}else{
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" colspan=2>";
+	}
+	echo "<span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['Goals'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"PlayerReport.php?Player=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['G'] . "</span></td>\n";
 	$ResultBound = True;
 }}?>
 <td style="width:20px"></td>
 <?php
 if (empty($TeamLeaderA) == false){while ($Row = $TeamLeaderA ->fetchArray()) {
-	echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
 	If ($LeagueOutputOption['PlayersMugShotBaseURL'] != "" AND $LeagueOutputOption['PlayersMugShotFileExtension'] != "" AND $Row['NHLID'] != ""){
-	echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\">";}
-	echo "</td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD \"><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['Assists'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"PlayerReport.php?Player=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['A'] . "</span></td>\n";	
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
+		echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\"></td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" >";
+	}else{
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" colspan=2>";
+	}
+	echo "<span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['Assists'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"PlayerReport.php?Player=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['A'] . "</span></td>\n";	
 	$ResultBound = True;
 }}
 If ($ResultBound == False){echo "<td></td><td></td><td></td><td></td>\n";}?>
@@ -467,19 +575,25 @@ If ($ResultBound == False){echo "<td></td><td></td><td></td><td></td>\n";}?>
 <?php
 $ResultBound = False;
 if (empty($TeamLeaderP) == false){while ($Row = $TeamLeaderP ->fetchArray()) {
-	echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
 	If ($LeagueOutputOption['PlayersMugShotBaseURL'] != "" AND $LeagueOutputOption['PlayersMugShotFileExtension'] != "" AND $Row['NHLID'] != ""){
-	echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\">";}
-	echo "</td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD \"><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['Points'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"PlayerReport.php?Player=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['P'] . "</span></td>\n";	
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
+		echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\"></td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" >";
+	}else{
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" colspan=2>";
+	}
+	echo "<span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['Points'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"PlayerReport.php?Player=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['P'] . "</span></td>\n";	
 	$ResultBound = True;
 }}?>
 <td style="width:20px"></td>
 <?php
 if (empty($TeamLeaderPlusMinus) == false){while ($Row = $TeamLeaderPlusMinus ->fetchArray()) {
-	echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
 	If ($LeagueOutputOption['PlayersMugShotBaseURL'] != "" AND $LeagueOutputOption['PlayersMugShotFileExtension'] != "" AND $Row['NHLID'] != ""){
-	echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\">";}
-	echo "</td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD \"><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['PlusMinus'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"PlayerReport.php?Player=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['PlusMinus'] . "</span></td>\n";	
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
+		echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\"></td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" >";
+	}else{
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" colspan=2>";
+	}
+	echo "<span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['PlusMinus'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"PlayerReport.php?Player=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['PlusMinus'] . "</span></td>\n";	
 	$ResultBound = True;
 }}
 If ($ResultBound == False){echo "<td></td><td></td><td></td><td></td>\n";}?>
@@ -489,24 +603,30 @@ If ($ResultBound == False){echo "<td></td><td></td><td></td><td></td>\n";}?>
 <?php
 $ResultBound = False;
 if (empty($TeamLeaderGAA ) == false){while ($Row = $TeamLeaderGAA  ->fetchArray()) {
-	echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
 	If ($LeagueOutputOption['PlayersMugShotBaseURL'] != "" AND $LeagueOutputOption['PlayersMugShotFileExtension'] != "" AND $Row['NHLID'] != ""){
-	echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\">";}
-	echo "</td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD \"><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['Wins'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"GoalieReport.php?Goalie=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['W'] . "</span></td>\n";	
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
+		echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\"></td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" >";
+	}else{
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" colspan=2>";
+	}
+	echo "<span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['Wins'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"GoalieReport.php?Goalie=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['W'] . "</span></td>\n";	
 	$ResultBound = True;	
 }}?>
 <td style="width:20px"></td>
 <?php
 if (empty($TeamLeaderSavePCT) == false){while ($Row = $TeamLeaderSavePCT ->fetchArray()) {
-	echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
 	If ($LeagueOutputOption['PlayersMugShotBaseURL'] != "" AND $LeagueOutputOption['PlayersMugShotFileExtension'] != "" AND $Row['NHLID'] != ""){
-	echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\">";}
-	echo "</td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD \"><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['SavePCT'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"GoalieReport.php?Goalie=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['PCT'] . "</span></td>\n";	
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshotTD\">";
+		echo "<img loading=\"lazy\" src=\"" . $LeagueOutputOption['PlayersMugShotBaseURL'] . $Row['NHLID'] . "." . $LeagueOutputOption['PlayersMugShotFileExtension'] . "\" alt=\"" . $Row['Name']. "\" class=\"STHSPHPTeam_HomePrimaryTableLeadersHeadshot\"></td><td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" >";
+	}else{
+		echo "<td class=\"STHSPHPTeam_HomePrimaryTableLeadersTextTD\" colspan=2>";
+	}
+	echo "<span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextStat\">" . $GeneralStatLang['SavePCT'] . "</span><br><a class=\"STHSPHPTeam_HomePrimaryTableLeadersTextPlayer\" href=\"GoalieReport.php?Goalie=" . $Row['Number'] . "\">" . $Row['Name'] . "</a><br><span class=\"STHSPHPTeam_HomePrimaryTableLeadersTextResult\">" . $Row['PCT'] . "</span></td>\n";	
 	$ResultBound = True;	
 }}
 If ($ResultBound == False){echo "<td></td><td></td><td></td><td></td>\n";}?>
-
 </tr>
+
 </table>
 <br>
 <table class="STHSPHPTeam_HomePrimaryTable" style="border-bottom-width:0px">
@@ -538,9 +658,13 @@ If ($TeamInfo <> Null){
 	if (empty($CoachInfo) == false){echo "<tr><td>" . $TeamLang['Coach'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . $CoachInfo['Name'] . "</td></tr>\n";}
 	echo "<tr><td>" . $TeamLang['Division'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . $TeamInfo['Division'] . "</td></tr>\n";
 	echo "<tr><td>" . $TeamLang['Conference'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . $TeamInfo['Conference'] . "</td></tr>\n";	
-	echo "<tr><td>" . $TeamLang['Captain'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . $TeamLeader['Captain'] . "</td></tr>\n";	
-	echo "<tr><td>" . $TeamLang['Assistant1'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . $TeamLeader['Assistant1'] . "</td></tr>\n";	
-	echo "<tr><td>" . $TeamLang['Assistant2'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . $TeamLeader['Assistant2'] . "</td></tr>\n";		
+	If ($Year == 0){
+		echo "<tr><td>" . $TeamLang['Captain'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . $TeamLeader['Captain'] . "</td></tr>\n";	
+		echo "<tr><td>" . $TeamLang['Assistant1'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . $TeamLeader['Assistant1'] . "</td></tr>\n";	
+		echo "<tr><td>" . $TeamLang['Assistant2'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . $TeamLeader['Assistant2'] . "</td></tr>\n";		
+	}else{
+		echo "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>\n";	
+	}
 	echo "<tr><td colspan=\"3\" class=\"STHSPHPTeamStat_TableTitle\"><br><br>" . $TeamLang['ArenaInfo'] . "<br><br></td></tr>\n";
 	echo "<tr><td rowspan=\"3\"><img src=\"" . $ImagesCDNPath . "/images/ArenaInfo.png\" alt=\"\" class=\"STHSPHPTeam_HomeSecondaryTableImage\"></td>";
 	echo "<td>" . $TeamLang['ArenaCapacity'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . number_Format($TeamFinance['ArenaCapacityL1'] + $TeamFinance['ArenaCapacityL2']) . "</td></tr>\n";	
@@ -551,7 +675,11 @@ If ($TeamInfo <> Null){
 	echo "<tr><td rowspan=\"4\"><img src=\"" . $ImagesCDNPath . "/images/RosterInfo.png\" alt=\"\" class=\"STHSPHPTeam_HomeSecondaryTableImage\"></td>";
 	echo "<td>" . $TeamLang['ProTeam'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" .  $PlayerInfoAverage['CountOfName'] . "</td></tr>\n";	
 	echo "<tr><td>" . $TeamLang['FarmTeam'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . ($PlayerInfoTotalAverage['CountOfName'] - $PlayerInfoAverage['CountOfName']) . "</td></tr>\n";	
-	echo "<tr><td>" . $TeamLang['ContractLimit'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" .  $PlayerInfoTotalAverage['CountOfName']  . " / " . $LeagueWebClient['MaximumPlayerPerTeam'] . "</td></tr>\n";	
+	If ($Year == 0){
+		echo "<tr><td>" . $TeamLang['ContractLimit'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" .  $PlayerInfoTotalAverage['CountOfName'] . " / " . $LeagueWebClient['MaximumPlayerPerTeam'] . "</td></tr>\n";
+	}else{
+		echo "<tr><td>" . $TeamLang['ContractLimit'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" .  $PlayerInfoTotalAverage['CountOfName'] . "</td></tr>\n";
+	}
 	echo "<tr><td>" . $TeamLang['Prospects'] . "</td><td class=\"STHSPHPTeam_HomeSecondaryTableTDStrongText\">" . $ProspectsCount['CountOfName'] . "</td></tr>\n";	
 		
 	if ($TeamCareerStatFound == true){
@@ -672,8 +800,13 @@ for($Status = 1; $Status >= 0; $Status--){
 	if ($Status == 1){echo "<tbody>";}
 	if ($Status == 0){echo "</tbody><tbody class=\"tablesorter-no-sort\"><tr><th colspan=\"" . $Colspan . "\">" . $TeamLang['Scratches'] . "</th></tr></tbody><tbody>";}
 	$LoopCount = (integer)0;
-	$Query = "SELECT * FROM PlayerInfo WHERE Team = " . $Team . " AND Status1 = " . $Status . " Order By PosD, Overall DESC";
-	If (file_exists($DatabaseFile) ==True){$PlayerRoster = $db->query($Query);}
+	If (file_exists($DatabaseFile) == True and $Year == 0){
+		$Query = "SELECT * FROM PlayerInfo WHERE Team = " . $Team . " AND Status1 = " . $Status . " Order By PosD, Overall DESC";
+		$PlayerRoster = $db->query($Query);
+	}elseif(file_exists($CareerStatDatabaseFile) == True and $Year > 0){
+		$Query = "SELECT * FROM PlayerInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Team = " . $Team . " AND Status1 = " . $Status . " Order By PosD, Overall DESC";
+		$PlayerRoster = $CareerStatdb->query($Query);
+	}
 	if (empty($PlayerRoster) == false){while ($Row = $PlayerRoster ->fetchArray()) {
 		$LoopCount +=1;
 		echo "<tr><td>" . $LoopCount . "</td>";
@@ -804,8 +937,13 @@ for($Status = 1; $Status >= 0; $Status--){
 	if ($Status == 1){echo "<tbody>";}
 	if ($Status == 0){echo "</tbody><tbody class=\"tablesorter-no-sort\"><tr><th colspan=\"" . $Colspan . "\">" . $TeamLang['Scratches'] . "</th></tr></tbody><tbody>";}
 	$LoopCount = (integer)0;
-	$Query = "SELECT * FROM GoalerInfo WHERE Team = " . $Team . " AND Status1 = " . $Status . " Order By Overall DESC";
-	If (file_exists($DatabaseFile) ==True){$GoalieRoster = $db->query($Query);}
+	If (file_exists($DatabaseFile) ==True and $Year == 0){
+		$Query = "SELECT * FROM GoalerInfo WHERE Team = " . $Team . " AND Status1 = " . $Status . " Order By Overall DESC";
+		$GoalieRoster = $db->query($Query);
+	}elseif(file_exists($CareerStatDatabaseFile) == True and $Year > 0){
+		$Query = "SELECT * FROM GoalerInfoHistory WHERE Year = " . $Year . " And Playoff = '" . $PlayoffString. "' AND Team = " . $Team . " AND Status1 = " . $Status . " Order By Overall DESC";
+		$GoalieRoster = $CareerStatdb->query($Query);		
+	}
 	if (empty($GoalieRoster) == false){while ($Row = $GoalieRoster ->fetchArray()) {
 		$LoopCount +=1;
 		echo "<tr><td>" . $LoopCount . "</td>";

@@ -10,12 +10,14 @@
 <th data-priority="3" title="Height" class="STHSW35"><?php echo $PlayersLang['Height'];?></th>
 <th data-priority="5" title="No Trade" class="STHSW35"><?php echo $PlayersLang['NoTrade'];?></th>
 <th data-priority="5" title="Available For Trade" class="STHSW35"><?php echo $PlayersLang['AvailableForTrade'];?></th>
-<th data-priority="5" title="Acquired By" class="STHSW55"><?php echo $PlayersLang['AcquiredBy'];?></th>
-<th data-priority="5" title="Last Trade Date" class="STHSW55"><?php echo $PlayersLang['LastTradeDate'];?></th>
+<?php If ($HistoryOutput == False){
+	echo "<th data-priority=\"5\" title=\"Acquired By\" class=\"STHSW55\">" . $PlayersLang['AcquiredBy'] . "</th>";
+	echo "<th data-priority=\"5\" title=\"Last Trade Date\" class=\"STHSW55\">" . $PlayersLang['LastTradeDate']. "</th>";
+}?>
 <th data-priority="5" title="Force Waiver" class="columnSelector-false STHSW45"><?php echo $PlayersLang['ForceWaiver'];?></th>
 <th data-priority="4" title="Possible Waiver" class="columnSelector-false STHSW45"><?php echo $PlayersLang['PossibleWaiver'];?></th>
 <th data-priority="1" title="Contract Duration" class="STHSW45"><?php echo $PlayersLang['Contract'];?></th>
-<th data-priority="5" title="Contract Signature Date" class="STHSW55"><?php echo $PlayersLang['ContractSignatureDate'];?></th>
+<?php If ($HistoryOutput == False){echo "<th data-priority=\"5\" title=\"Contract Signature Date\" class=\"STHSW55\">" . $PlayersLang['ContractSignatureDate'] . "</th>";}?>
 <th data-priority="6" title="Force UFA" class="columnSelector-false STHSW55"><?php echo $PlayersLang['ForceUFA'];?></th>
 <th data-priority="6" title="EmergencyRecall" class="columnSelector-false STHSW55"><?php echo $PlayersLang['EmergencyRecall'];?></th>
 <?php If ($FreeAgentYear >= 0){echo "<th data-priority=\"4\" class=\"STHSW45\" title=\"Status\">" . $PlayersLang['Status'] . "</th>";}?>
@@ -98,12 +100,14 @@ if (empty($PlayerInfo) == false){while ($Row = $PlayerInfo ->fetchArray()) {
 	If ($LeagueOutputOption['InchInsteadofCM'] == "True"){echo "<td>" . (($Row['Height'] - ($Row['Height'] % 12))/12) . " ft" .  ($Row['Height'] % 12) .  "</td>";}else{echo "<td>" . Round($Row['Height'] * 2.54) . " CM</td>";}	
 	echo "<td>"; if ($Row['NoTrade']== "True"){ echo "Yes"; }else{echo "No";};echo "</td>";
 	echo "<td>"; if ($Row['AvailableForTrade']== "True"){ echo "Yes"; }else{echo "No";};echo "</td>";
-	echo "<td>" . $Row['AcquiredType'] . "</td>";
-	echo "<td>" . $Row['LastTradeDate'] . "</td>";
+	If ($HistoryOutput == False){
+		echo "<td>" . $Row['AcquiredType'] . "</td>";
+		echo "<td>" . $Row['LastTradeDate'] . "</td>";
+	}
 	echo "<td>"; if ($Row['ForceWaiver']== "True"){ echo "Yes"; }else{echo "No";};echo "</td>";
 	echo "<td>"; if (array_key_exists('WaiverPossible',$Row)){if ($Row['WaiverPossible']== "True"){ echo "Yes"; }else{echo "No";};echo "</td>";}else{echo "N/A";}
 	echo "<td>" . $Row['Contract'] . "</td>";
-	echo "<td>" . $Row['ContractSignatureDate'] . "</td>";
+	If ($HistoryOutput == False){echo "<td>" . $Row['ContractSignatureDate'] . "</td>";}
 	echo "<td>" . $Row['ForceUFA'] . "</td>";
 	echo "<td>" . $Row['EmergencyRecall'] . "</td>";
 	If ($FreeAgentYear >= 0){

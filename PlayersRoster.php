@@ -115,7 +115,7 @@ If (file_exists($DatabaseFile) == false){
 				}
 			}
 			
-			$Title = $Title . $DynamicTitleLang['PlayersRoster'] . " - " . $Year;
+			$Title = $Title . $DynamicTitleLang['PlayersRoster'] . " - " . $TopMenuLang['Year'] . " " . $Year;
 			If ($Playoff == True){$Title = $Title . $TopMenuLang['Playoff'];}
 			
 			/* Order by and Limit */

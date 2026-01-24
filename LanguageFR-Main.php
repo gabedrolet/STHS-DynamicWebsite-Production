@@ -179,5 +179,4 @@ $LeagueInformationLang = array(
 );
 
 /* End Main FR Language Pack */
-
 ?>

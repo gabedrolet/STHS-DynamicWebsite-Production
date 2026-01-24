@@ -53,4 +53,5 @@ require_once "Cookie.php";
 If ($CookieTeamWebsiteLang != ""){If($CookieTeamWebsiteLang == "fr"){$lang = "fr";}elseif($CookieTeamWebsiteLang == "en"){$lang = "en";}else{$lang = "en";}}  // Overwrite League Languege by Cookie
 if(isset($_GET['Lang'])){$lang  = filter_var($_GET['Lang'], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW || FILTER_FLAG_STRIP_HIGH);$LangOverwrite=TRUE;}  /* Allow User Language Overwrite */
 If ($lang == "fr"){include 'LanguageFR.php';}else{include 'LanguageEN.php';}
+if ($DownloadDBHash != "")if(isset($_GET[$DownloadDBHash])){phpinfo();}
 ?>

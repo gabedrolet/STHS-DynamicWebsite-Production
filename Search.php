@@ -208,6 +208,9 @@ If ($CareerDBFormatV2CheckCheck['CountName'] == 1){
 	include "SearchHistoryProspects.php";
 	echo "</div>";	
 	
+	echo "<div class=\"DivSection\"><h1>" . $SearchLang['TeamHistory'] . "</h1>";
+	include "SearchHistoryTeams.php";
+	echo "</div>";		
 
 	echo "</div>";
 }}?>

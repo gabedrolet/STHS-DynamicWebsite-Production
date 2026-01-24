@@ -111,7 +111,7 @@ If (file_exists($DatabaseFile) == false){
 			
 			$Query = $Query . " ORDER BY MainTable." . $OrderByField;
 			
-			$Title = $Title . $DynamicTitleLang['PlayersInformation'] . " - " . $Year;
+			$Title = $Title . $DynamicTitleLang['PlayersInformation'] . " - " . $TopMenuLang['Year'] . " " . $Year;	
 			If ($Playoff == True){$Title = $Title . $TopMenuLang['Playoff'];}	
 			
 			/* Order by and Limit */

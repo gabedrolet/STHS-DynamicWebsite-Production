@@ -12,8 +12,6 @@ If (file_exists($DatabaseFile) == false){
 	$OrderByInput = (string)"";	
 	$LeagueName = (string)"";
 	
-
-
 	$db = new SQLite3($DatabaseFile);
 	$Query = "Select Name, RFAAge, UFAAge, OffSeason from LeagueGeneral";
 	$LeagueGeneral = $db->querySingle($Query,true);		

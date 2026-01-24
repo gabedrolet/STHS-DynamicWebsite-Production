@@ -54,7 +54,7 @@ If (file_exists($DatabaseFile) == false){
 			}
 			$Query = $Query . " ORDER BY NAME";
 			
-			$Title = $Title  . $DynamicTitleLang['Prospects'] . " - " . $Year;
+			$Title = $Title  . $DynamicTitleLang['Prospects'] . " - " . $TopMenuLang['Year'] . " " . $Year;
 			If ($Playoff == True){$Title = $Title . $TopMenuLang['Playoff'];}
 			
 			/* Order by  */
