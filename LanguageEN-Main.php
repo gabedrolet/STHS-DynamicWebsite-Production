@@ -24,7 +24,8 @@ $IndexLang = array(
 'FarmGamesDaysStar'		=> 'Today Farm 3 Star',
 'NextGames' 	=> 'Next Games',
 'BoxScore'		=> 'Box score ',
-'NewFeature'	=> "✨ New STHS Feature: Create, Edit & Share STHS Themes! <a href=\"ThemeEditor.php\">Click here to get started.</a>"
+'NewFeature'	=> "✨ New STHS Feature: Create, Edit & Share STHS Themes! <a href=\"ThemeEditor.php\">Click here to get started.</a>",
+'STHSIntegratedNews'	=> ""
 );
 
 $NewsLang = array(

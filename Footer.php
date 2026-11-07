@@ -18,7 +18,9 @@ If ($LangOverwrite == TRUE){
 		echo "Version Française du Site Web</a>";
 	}
 }
-If (file_exists($DatabaseFile) == True){try{echo " - " . $DatabaseCreate;If (isset($LeagueGeneralMenu) == True){echo	$LeagueGeneralMenu['DatabaseCreationDate'];}} catch (Exception $e) {}}}
+$ThemeName = $STHSThemeNumber[$CookieTeamWebsiteThemeID] ?? "";
+If ($ThemeName != ""){echo " - " . $ThemeName;}
+If (file_exists($DatabaseFile) == True){try{echo " - " . $DatabaseCreate;If (isset($LeagueGeneralMenu) == True){echo $LeagueGeneralMenu['DatabaseCreationDate'];}} catch (Exception $e) {}}}
 If (isset($PerformanceMonitorStart)){echo "<script>console.log(\"STHS Page PHP Performance : " . (microtime(true)-$PerformanceMonitorStart) . " - Peak Memory Usage : " . round(memory_get_peak_usage() / 1024) . "KB  - Peak Memory Usage : " . round(memory_get_peak_usage(true) / 1024) . "KB \"); </script>";}?>
 </div>
 </body></html> 

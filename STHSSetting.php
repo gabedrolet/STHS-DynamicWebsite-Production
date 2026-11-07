@@ -27,6 +27,7 @@ $CSSJSCDNPath = (string)"";
 $STHSBotProtectionLevel1 = (bool)False;
 $STHSBotProtectionLevel2 = (bool)False;
 $STHSIntegratedHosting = (bool)False;
+If ($STHSBotProtectionLevel2 == True){$isBot = stripos($_SERVER['HTTP_USER_AGENT'] ?? '', 'bot') !== false; if ($isBot) {http_response_code(403); exit;}}
 If (file_exists("STHSMain-CSSOverwrite.css") == true){$WebClientHeadCode = $WebClientHeadCode . "<link href=\"STHSMain-CSSOverwrite.css\" rel=\"stylesheet\" type=\"text/css\" />";}
 
 If (file_exists("STHSSetting.ini") == True){try{
@@ -47,6 +48,8 @@ If (file_exists("STHSSetting.ini") == True){try{
 		$LeagueOwner = $STHSOptions['LeagueOwner'];
 		$MetaContent = $STHSOptions['MetaContent'];
 		If ($STHSOptions['DoNotRequiredLoginDynamicWebsite'] == "True"){$DoNotRequiredLoginDynamicWebsite = True;}
+		If ($STHSOptions['STHSBotProtectionLevel1'] == "True"){$STHSBotProtectionLevel1 = True;}
+		If ($STHSOptions['STHSBotProtectionLevel2'] == "True"){$STHSBotProtectionLevel2 = True;}		
 		$DefaultTheme = $STHSOptions['CustomWebsiteTheme']; 
 		$lang = $STHSOptions['Lang']; 
 	}

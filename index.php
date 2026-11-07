@@ -204,7 +204,7 @@ if (empty($Schedule) == false){while ($row = $Schedule ->fetchArray()) {
 <?php
 $LoopCurrentDate = "";
 $HeadlineFound = (bool)False;
-If ($CookieTeamNumber > 0 AND $STHSIntegratedHosting == True){echo "<tr><th colspan=\"4\" class=\"STHSCenter\">" .  $IndexLang['NewFeature'] . "</th></tr>\n";}
+If ($CookieTeamNumber > 0){echo "<tr><th colspan=\"4\" class=\"STHSCenter\">" .  $IndexLang['NewFeature'] . "</th></tr>\n";}
 if (empty($Headlines0) == false){while ($row = $Headlines0 ->fetchArray()) {
 	$HeadlineFound = True;
 	If ($LoopCurrentDate == ""){echo "<tr><th colspan=\"4\" class=\"STHSCenter\">" . $row['DateTxt'] . "</th></tr>\n";$LoopCurrentDate = $row['DateTxt'];}
@@ -382,6 +382,7 @@ if (empty($PlayerStat) == false){while ($Row = $PlayerStat ->fetchArray()) {
 
 <td class="STHSIndex_NewsTD">
 <div class="STHSIndex_TheNews"><?php echo $LeagueName . $IndexLang['News'];?></div>
+<?php If ($CookieTeamNumber > 0 AND $STHSIntegratedHosting == True){echo "<div class=\"STHSIndex_NewsDiv STHSIndex_Headline\" style=\"line-height: 1.25\">" . $IndexLang['STHSIntegratedNews'] . "</div>\n";}?>
 <div class="STHSIndex_NewsDiv"><?php If (file_exists("NewsSub.php") == true){ include "NewsSub.php";}?></div>
 <br><br>
 </td>

@@ -24,7 +24,8 @@ $IndexLang = array(
 'FarmGamesDaysStar'		=> '3 étoiles de la journée Mineure',
 'NextGames' 	=> 'Prochains matchs',
 'BoxScore'		=> 'Sommaire du match ',
-'NewFeature'	=> "✨ Nouvelle fonctionnalité du STHS: Créez, modifiez et partagez des thèmes STHS ! <a href=\"ThemeEditor.php\">Cliquez ici pour commencer.</a>"
+'NewFeature'	=> "✨ Nouvelle fonctionnalité du STHS: Créez, modifiez et partagez des thèmes STHS ! <a href=\"ThemeEditor.php\">Cliquez ici pour commencer.</a>",
+'STHSIntegratedNews'	=> ""
 );
 
 $NewsLang = array(

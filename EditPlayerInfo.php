@@ -103,19 +103,19 @@ $(function() {
 	  filter_searchDelay : 1000,	  
 	  filter_reset: '.tablesorter_Reset',	 
 	}
-	});
-  $('.STHSPHPAllPlayerInformation_Table').on(
-    'blur',
-    'input[type="text"], input[type="number"]',
-	function () {
-	  $(this)
-		.closest('table')
-		.trigger('updateCell', [$(this).closest('td')]);
-  }
-); 
+	}); 
 });
 function UpdatePlayer(Id) {
 try {
+	// Update Tablesorter for all editable cells in this row
+	var row = $('#SalaryOffer' + Id).closest('tr');
+	
+	row.find('input[type="text"], input[type="number"]').each(function () {
+		$(this)
+			.closest('table')
+			.trigger('updateCell', [$(this).closest('td')]);
+	});		
+	
 	DraftYear = document.getElementById("DraftYear"+Id).value;
 	DraftOverallPick = document.getElementById("DraftOverallPick"+Id).value;
 	NHLID = document.getElementById("NHLID"+Id).value;
@@ -125,7 +125,7 @@ try {
 	xmlhttp.onreadystatechange=function() {
 		if (this.readyState==4 && this.status==200) {
 		  document.getElementById("STHSDivInformationMessage").innerHTML=this.responseText;
-		  document.getElementById("STHSDivInformationMessage").scrollIntoView(true);
+		  window.scrollTo(0, 0);
 		}
 	}
 	xmlhttp.open("POST","APIBackEnd.php<?php If ($lang == "fr"){echo "?Lang=fr";}?> ",true);
@@ -139,8 +139,8 @@ catch(err) {
 }
 
 </script>
-<div id="STHSDivInformationMessage" class="STHSDivInformationMessage"><?php if ($InformationMessage != ""){echo $InformationMessage;}?><br></div>
 <div class="STHSEditPlayerInfo_MainDiv" id="EditPlayerInfoMainDiv" style="width:99%;margin:auto;">
+<div id="STHSDivInformationMessage" class="STHSDivInformationMessage"><?php if ($InformationMessage != ""){echo $InformationMessage;}?><br></div>
 <?php echo "<h1>" . $Title . "</h1>"; ?>
 <div class="tablesorter_ColumnSelectorWrapper">
     <input id="tablesorter_colSelect1" type="checkbox" class="hidden">

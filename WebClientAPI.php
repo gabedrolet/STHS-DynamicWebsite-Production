@@ -135,7 +135,7 @@ function api_js_function_line_validator($db,$teamid,$league){
 	return $ret;
 }
 
-function api_layout_header($id=false,$db=false,$teamid=0,$league=false,$headcode="",$STHSIntegratedHosting){?>
+function api_layout_header($id=false,$db=false,$teamid=0,$league=false,$headcode="",$STHSIntegratedHosting=false){?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>

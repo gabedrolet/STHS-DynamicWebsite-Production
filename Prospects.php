@@ -149,16 +149,7 @@ $(function() {
 	  output_delivery: 'd',
 	  output_saveFileName: 'STHSProspects.CSV'
     }
-  });
-  $('.STHSPHPAllProspects_Table').on(
-    'blur',
-    'input[type="text"], input[type="number"]',
-    function () {
-      $(this)
-        .closest('table')
-        .trigger('updateCell', [$(this).closest('td')]);
-    }
-  );   
+  });   
   $('.download').click(function(){
       var $table = $('.STHSPHPAllProspects_Table'),
       wo = $table[0].config.widgetOptions;
@@ -169,6 +160,15 @@ $(function() {
 
 function UpdateProspect(Id) {
 try {
+	// Update Tablesorter for all editable cells in this row
+	var row = $('#SalaryOffer' + Id).closest('tr');
+	
+	row.find('input[type="text"], input[type="number"]').each(function () {
+		$(this)
+			.closest('table')
+			.trigger('updateCell', [$(this).closest('td')]);
+	});		
+	
 	Year = document.getElementById("Year"+Id).value;
 	OverallPick = document.getElementById("OverallPick"+Id).value;
 	Information = document.getElementById("Information"+Id).value;
@@ -177,7 +177,7 @@ try {
 	xmlhttp.onreadystatechange=function() {
 		if (this.readyState==4 && this.status==200) {
 		  document.getElementById("STHSDivInformationMessage").innerHTML=this.responseText;
-		  document.getElementById("STHSDivInformationMessage").scrollIntoView(true);
+		  window.scrollTo(0, 0);
 		}
 	}
 	xmlhttp.open("POST","APIBackEnd.php<?php If ($lang == "fr"){echo "?Lang=fr";}?> ",true);

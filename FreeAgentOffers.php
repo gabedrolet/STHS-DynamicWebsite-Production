@@ -147,15 +147,6 @@ $(function() {
       filter_reset: '.tablesorter_Reset',	 
     }
   }); 
-  $('.STHSPHPPlayerFreeAgentOffers_Table').on(
-    'blur',
-    'input[type="text"], input[type="number"]',
-    function () {
-      $(this)
-        .closest('table')
-        .trigger('updateCell', [$(this).closest('td')]);
-    }
-  );  
 });
 $(function() {
   $(".STHSPHPGoalieFreeAgentOffers_Table").tablesorter({
@@ -181,19 +172,20 @@ $(function() {
 	  filter_searchDelay : 500,	  
       filter_reset: '.tablesorter_Reset',	 
     }
-  }); 
-  $('.STHSPHPGoalieFreeAgentOffers_Table').on(
-    'blur',
-    'input[type="text"], input[type="number"]',
-    function () {
-      $(this)
-        .closest('table')
-        .trigger('updateCell', [$(this).closest('td')]);
-    }
-  );   
+  });   
 })
 function UpdateFreeAgentOffer(Id) {
 try {
+	
+	// Update Tablesorter for all editable cells in this row
+	var row = $('#SalaryOffer' + Id).closest('tr');
+	
+	row.find('input[type="text"], input[type="number"]').each(function () {
+		$(this)
+			.closest('table')
+			.trigger('updateCell', [$(this).closest('td')]);
+	});	
+	
 	SalaryOffer = document.getElementById("SalaryOffer"+Id).value;
 	DurationOffer = document.getElementById("DurationOffer"+Id).value;
 	BonusOffer = document.getElementById("BonusOffer"+Id).value;
@@ -223,6 +215,16 @@ catch(err) {
 
 function EraseFreeAgentOffer(Id) {
 try {
+	
+	// Update Tablesorter for all editable cells in this row
+	var row = $('#SalaryOffer' + Id).closest('tr');
+	
+	row.find('input[type="text"], input[type="number"]').each(function () {
+		$(this)
+			.closest('table')
+			.trigger('updateCell', [$(this).closest('td')]);
+	});	
+	
 	var xmlhttp=new XMLHttpRequest();
 	xmlhttp.onreadystatechange=function() {
 		if (this.readyState==4 && this.status==200) {
@@ -252,6 +254,16 @@ catch(err) {
 
 function UpdateNextYearFreeAgentOfferPlayerNumber(Id) {
 try {
+	
+	// Update Tablesorter for all editable cells in this row
+	var row = $('#SalaryOffer' + Id).closest('tr');
+	
+	row.find('input[type="text"], input[type="number"]').each(function () {
+		$(this)
+			.closest('table')
+			.trigger('updateCell', [$(this).closest('td')]);
+	});	
+	
 	SalaryOffer = document.getElementById("SalaryOffer"+Id).value;
 	DurationOffer = document.getElementById("DurationOffer"+Id).value;
 	BonusOffer = document.getElementById("BonusOffer"+Id).value;

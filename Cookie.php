@@ -6,6 +6,7 @@ $CookieTeamWebsiteThemeID = (int)-1;
 $CookieTeamWebsiteLang = (string)"";
 $LoginLink = (string)"";
 If (isset($Cookie_Name) == False){$Cookie_Name = (string)"";}
+$TempCookie_Name = (string)"STHSTempTheme";
 
 if (isset($_POST["Logoff"]) OR isset($_GET['Logoff'])) {
 RemoveCookie:
@@ -42,5 +43,25 @@ RemoveCookie:
 		$LoginLink = $CurrentLink . "?Logoff";
 	}
 	If ($CookieTeamNumber == 0){Goto RemoveCookie;} //Remove Cookie if cookie provived doesn't match.
+}elseif(isset($_COOKIE[$TempCookie_Name])) {	
+    $encryption_key = base64_decode($CookieTeamNumberKey);
+	list($encrypted_data, $iv) = explode('::', base64_decode($_COOKIE[$TempCookie_Name]), 2);
+    $CookieArray = unserialize(openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv));
+	if(isset($CookieArray['TeamWebsiteThemeID'])){$CookieTeamWebsiteThemeID = $CookieArray['TeamWebsiteThemeID'];}else{$CookieTeamWebsiteThemeID = -1;}
+}elseif($STHSIntegratedHosting == True){
+	$CookieTeamWebsiteThemeID = random_int(1001, 1034);
+	$CookieArray['TeamWebsiteThemeID'] = $CookieTeamWebsiteThemeID;		
+	$encryption_key = base64_decode($CookieTeamNumberKey);
+	$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+	$encrypted = openssl_encrypt(serialize($CookieArray), 'aes-256-cbc', $encryption_key, 0, $iv);
+	$CookieArrayDetail = array(
+		'expires' => time() + 3600,
+		'path' => '/',
+		'domain' => $_SERVER['HTTP_HOST'],
+		'secure' => isset($_SERVER['HTTPS']),
+		'httponly' => true,
+		'samesite' => 'Strict'
+	);
+	setcookie($TempCookie_Name, base64_encode($encrypted . '::' . $iv),$CookieArrayDetail);
 }
 ?>

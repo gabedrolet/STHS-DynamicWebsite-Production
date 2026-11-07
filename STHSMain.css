@@ -322,7 +322,7 @@ a:hover { color:var(--STHS-HyperLink); text-decoration:none;}
 .STHSWP49{width:49%;vertical-align: top;}
 .STHSWP33{width:33%;vertical-align: top;}
 .STHSWP2{width:2%;}
-.STHSDivInformationMessage{color: #FF0000; font-weight: bold;padding:1px 1px 1px 5px;text-align:center;}
+.STHSDivInformationMessage{color: #FF0000; font-weight: bold;padding:5px 1px 5px 5px;text-align:center;}
 .STHSCenter{text-align:center;}
 .STHSRight{text-align:right;}
 .STHSCursorUL1{max-width:150px;width:100%;margin:0 auto;}
